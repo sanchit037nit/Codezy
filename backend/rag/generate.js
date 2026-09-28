@@ -6,14 +6,18 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const client = new ChromaClient({ host: "my-chromadb-server-paj3.onrender.com", port: 443, ssl: true });
+const client = new ChromaClient({
+  host: "my-chromadb-server-paj3.onrender.com",
+  port: 443,
+  ssl: true,
+});
 
 const embeddingFunction = new DefaultEmbeddingFunction();
 
 const model = new ChatGroq({
-    apiKey: process.env.GROQ_API_KEY,
-    model: "openai/gpt-oss-120b",
-    temperature: 0,
+  apiKey: process.env.GROQ_API_KEY,
+  model: "openai/gpt-oss-120b",
+  temperature: 0,
 });
 
 const prompt = PromptTemplate.fromTemplate(`
@@ -36,55 +40,55 @@ Answer:
 `);
 
 async function askCodezy(question) {
-    try {
-        // 1. Get Chroma collection
-        const collection = await client.getCollection({
-            name: "codezy_knowledge",
-            embeddingFunction,
-        });
+  try {
+    // 1. Get Chroma collection
+    const collection = await client.getCollection({
+      name: "codezy_knowledge",
+      embeddingFunction,
+    });
 
-        // 2. Retrieve relevant documents
-        const results = await collection.query({
-            queryTexts: [question],
-            nResults: 2,
-        });
+    // 2. Retrieve relevant documents
+    const results = await collection.query({
+      queryTexts: [question],
+      nResults: 2,
+    });
 
-        const documents = results.documents[0];
-        const metadatas = results.metadatas[0];
+    const documents = results.documents[0];
+    const metadatas = results.metadatas[0];
 
-        // 3. Create context
-        const context = documents
-            .map((document, index) => {
-                return `Source: ${metadatas[index].source}\n${document}`;
-            })
-            .join("\n\n");
+    // 3. Create context
+    const context = documents
+      .map((document, index) => {
+        return `Source: ${metadatas[index].source}\n${document}`;
+      })
+      .join("\n\n");
 
-        // 4. Create LangChain prompt
-        const formattedPrompt = await prompt.format({
-            context,
-            question,
-        });
+    // 4. Create LangChain prompt
+    const formattedPrompt = await prompt.format({
+      context,
+      question,
+    });
 
-        // 5. Send prompt to Groq through LangChain
-        const response = await model.invoke(formattedPrompt);
+    // 5. Send prompt to Groq through LangChain
+    const response = await model.invoke(formattedPrompt);
 
-        console.log("\n==============================");
-        console.log("Question:");
-        console.log(question);
+    console.log("\n==============================");
+    console.log("Question:");
+    console.log(question);
 
-        console.log("\nAnswer:");
-        console.log(response.content);
+    console.log("\nAnswer:");
+    console.log(response.content);
 
-        console.log("\nSources:");
+    console.log("\nSources:");
 
-        metadatas.forEach((metadata) => {
-            console.log(`- ${metadata.source}`);
-        });
+    metadatas.forEach((metadata) => {
+      console.log(`- ${metadata.source}`);
+    });
 
-        console.log("==============================\n");
-    } catch (error) {
-        console.error("LangChain RAG failed:", error);
-    }
+    console.log("==============================\n");
+  } catch (error) {
+    console.error("LangChain RAG failed:", error);
+  }
 }
 
 askCodezy("How does Codezy execute C++ code?");

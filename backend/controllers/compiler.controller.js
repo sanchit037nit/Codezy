@@ -1,29 +1,23 @@
 import { executeCode } from "../services/jdoodle.service.js";
 
 export const runCode = async (req, res) => {
-    try {
-        const { language, code, input } = req.body;
+  try {
+    const { language, code, input } = req.body;
 
-        const result = await executeCode(
-            language,
-            code,
-            input
-        );
+    const result = await executeCode(language, code, input);
 
-        console.log(result);
+    console.log(result);
 
-        res.json({
-            success: true,
-            result,
-        });
+    res.json({
+      success: true,
+      result,
+    });
+  } catch (err) {
+    console.log("Run code error:", err);
 
-    } catch (err) {
-
-        console.log("Run code error:", err);
-
-        res.status(500).json({
-            success: false,
-            error: err.message,
-        });
-    }
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
 };

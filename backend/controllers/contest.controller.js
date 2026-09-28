@@ -4,8 +4,8 @@ import { ContestGroup } from "../models/contestGroup.model.js";
 // Fetch all upcoming and live contests
 export const getContests = async (req, res) => {
   try {
-    const contests = await Contest.find({ 
-      status: { $in: ["UPCOMING", "ACTIVE"] } 
+    const contests = await Contest.find({
+      status: { $in: ["UPCOMING", "ACTIVE"] },
     }).sort({ startTime: 1 });
 
     res.status(200).json(contests);
@@ -15,14 +15,14 @@ export const getContests = async (req, res) => {
   }
 };
 
-// Fetch a specific contest group (with its messages and participants)
+
 export const getContestGroup = async (req, res) => {
   try {
     const { contestId } = req.params;
     const group = await ContestGroup.findOne({ contestId })
       .populate("participants", "username profilePic")
       .populate("messages.sender", "username profilePic")
-      .populate("messages.solutionId", "title language"); // Assuming solution model has title/language
+      .populate("messages.solutionId", "title language"); 
 
     if (!group) {
       return res.status(404).json({ error: "Contest group not found" });
@@ -35,7 +35,7 @@ export const getContestGroup = async (req, res) => {
   }
 };
 
-// Join a contest group
+
 export const joinGroup = async (req, res) => {
   try {
     const { contestId } = req.params;
@@ -58,7 +58,7 @@ export const joinGroup = async (req, res) => {
   }
 };
 
-// Post a message or solution link to the group
+
 export const postMessage = async (req, res) => {
   try {
     const { contestId } = req.params;
@@ -75,22 +75,31 @@ export const postMessage = async (req, res) => {
     }
 
     if (group.status === "ARCHIVED") {
-      return res.status(403).json({ error: "This contest group is archived. You cannot post new messages." });
+      return res
+        .status(403)
+        .json({
+          error:
+            "This contest group is archived. You cannot post new messages.",
+        });
     }
 
     const newMessage = {
       sender: userId,
       content,
       solutionId: solutionId || null,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     group.messages.push(newMessage);
     await group.save();
 
     // Populate sender details so the frontend has the user's name/profilePic
-    const populatedGroup = await ContestGroup.findById(group._id).populate("messages.sender", "name username profilePic");
-    const broadcastMessage = populatedGroup.messages[populatedGroup.messages.length - 1];
+    const populatedGroup = await ContestGroup.findById(group._id).populate(
+      "messages.sender",
+      "name username profilePic",
+    );
+    const broadcastMessage =
+      populatedGroup.messages[populatedGroup.messages.length - 1];
 
     // Broadcast the new message to all users currently in this contest room
     if (global.io) {

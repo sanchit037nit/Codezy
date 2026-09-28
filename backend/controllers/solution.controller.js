@@ -244,29 +244,25 @@ export const commentonsolution = async (req, res) => {
     const solid = req.params.id;
     const userid = req.user._id;
 
-    // 1️⃣ Find solution (no populate here)
+
     const sol = await Solution.findById(solid);
 
     if (!sol) {
       return res.status(404).json({ error: "Solution not found" });
     }
 
-    // 2️⃣ Push new comment
     sol.comments.push({
       text: text,
       user: userid,
     });
 
-    // 3️⃣ Save
     await sol.save();
 
-    // 4️⃣ Re-fetch with populate (IMPORTANT 🔥)
     const updatedSol = await Solution.findById(solid).populate(
       "comments.user",
       "name email profilephoto"
     );
 
-    // 5️⃣ Send updated populated data
     res.status(200).json(updatedSol);
 
   } catch (error) {
@@ -308,7 +304,7 @@ export const sendMessage = async (req, res) => {
 
 try {
     const response = await groq.chat.completions.create({
-      model: "openai/gpt-oss-120b", // or another supported Groq model
+      model: "openai/gpt-oss-120b", 
       messages: [
         {
           role: "user",

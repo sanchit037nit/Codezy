@@ -22,6 +22,7 @@ const Ask = () => {
     createAIConversation,
     switchAIConversation,
     getAIConversations,
+    uploadPDF,
   } = useSolution();
 
   useEffect(() => {
@@ -34,6 +35,16 @@ const Ask = () => {
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    if (file.type === "application/pdf" || file.name.endsWith(".pdf")) {
+      if (file.size > 5242880) {
+        alert("File is too large! Please upload a PDF under 5MB.");
+      } else {
+        uploadPDF(file);
+      }
+      e.target.value = null;
+      return;
+    }
 
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -178,15 +189,18 @@ const Ask = () => {
                     ref={fileInputRef}
                     onChange={handleFileUpload}
                     className="hidden"
-                    accept=".js,.jsx,.ts,.tsx,.py,.cpp,.c,.java,.txt,.md"
+                    accept=".js,.jsx,.ts,.tsx,.py,.cpp,.c,.java,.txt,.md,.pdf"
                   />
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="flex items-center gap-2 px-3 py-2 rounded-md text-xs transition bg-black/5 dark:bg-white/5 text-gray-600 dark:text-gray-400 border border-black/10 dark:border-white/10 hover:bg-[#fdf6e3] dark:bg-[#10141F]"
-                  >
-                    <Paperclip size={14} />
-                    Upload File
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      className="flex items-center gap-2 px-3 py-2 rounded-md text-xs transition bg-black/5 dark:bg-white/5 text-gray-600 dark:text-gray-400 border border-black/10 dark:border-white/10 hover:bg-[#fdf6e3] dark:bg-[#10141F]"
+                    >
+                      <Paperclip size={14} />
+                      Upload File
+                    </button>
+                    <span className="text-[10px] text-[#64748b] dark:text-[#5C6370]">Max PDF size: 5MB</span>
+                  </div>
 
                   <button
                     onClick={handleAsk}

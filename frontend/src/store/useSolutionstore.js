@@ -227,6 +227,7 @@ aires: async (data) => {
                 body: JSON.stringify({
                     question: data,
                     history: aiHistory,
+                    conversationId: currentConversationId,
                 }),
             }
         );
@@ -436,6 +437,31 @@ aires: async (data) => {
         });
     }
     },
+
+uploadPDF: async (file) => {
+    try {
+        let { currentConversationId, createAIConversation } = get();
+        if (!currentConversationId) {
+            const conversation = await createAIConversation();
+            currentConversationId = conversation._id;
+        }
+
+        const formData = new FormData();
+        formData.append("pdf", file);
+        formData.append("conversationId", currentConversationId);
+
+        toast.loading("Uploading PDF to knowledge base...", { id: "pdf-upload" });
+        await axiosinstance.post("/ai/upload-pdf", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        });
+        toast.success("PDF uploaded successfully! You can now ask questions about it.", { id: "pdf-upload" });
+    } catch (error) {
+        console.error("Error uploading PDF:", error);
+        toast.error("Failed to upload PDF", { id: "pdf-upload" });
+    }
+},
 
 createAIConversation: async () => {
     try {

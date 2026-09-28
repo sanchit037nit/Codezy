@@ -22,7 +22,6 @@ export const getDashboardStats = async (req, res) => {
       topActiveUsers,
       topReportedPosts,
     ] = await Promise.all([
-
       // ================= COUNTS =================
 
       User.countDocuments({ role: "user" }),
@@ -135,10 +134,7 @@ export const getDashboardStats = async (req, res) => {
 
       // ================= RECENT USERS =================
 
-      User.find(
-        { role: "user" },
-        "name email profilephoto createdAt"
-      )
+      User.find({ role: "user" }, "name email profilephoto createdAt")
         .sort({ createdAt: -1 })
         .limit(5),
 
@@ -261,7 +257,6 @@ export const getDashboardStats = async (req, res) => {
 
       generatedAt: new Date(),
     });
-
   } catch (error) {
     console.log("Dashboard Error:", error);
 

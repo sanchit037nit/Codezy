@@ -1,31 +1,32 @@
 import jwt from "jsonwebtoken";
-import user from "../models/users.model.js"
+import user from "../models/users.model.js";
 
-export const protectroute = async(req,res,next) =>{
-  try{
-    const token=req.cookies.jwt
+export const protectroute = async (req, res, next) => {
+  try {
+    const token = req.cookies.jwt;
 
-    if(!token){
-        return res.status(401).json({message:"unauthorized - no token provided"})
+    if (!token) {
+      return res
+        .status(401)
+        .json({ message: "unauthorized - no token provided" });
     }
 
-    const decoded=jwt.verify(token,process.env.JWT_SECRET)
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    if(!decoded){
-        return res.status(401).json({message:"unauthorized - invalid token"})
+    if (!decoded) {
+      return res.status(401).json({ message: "unauthorized - invalid token" });
     }
     // console.log(decoded)
-    const User=await user.findById(decoded.userid).select("-password")
+    const User = await user.findById(decoded.userid).select("-password");
 
-    if(!User){
-        return res.status(401).json({message:"user not found"})
+    if (!User) {
+      return res.status(401).json({ message: "user not found" });
     }
-      
-    req.user=User
-    next()
-   }
-    catch (error){
-        console.log("error in protecteroute",error.message)
-        res.status(500).json({message: "error in protecteroute"})
-    }
-}
+
+    req.user = User;
+    next();
+  } catch (error) {
+    console.log("error in protecteroute", error.message);
+    res.status(500).json({ message: "error in protecteroute" });
+  }
+};

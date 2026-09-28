@@ -32,24 +32,24 @@ export const markdownComponents = {
   },
 
   p({ children }) {
-    return <p className="text-gray-300 leading-7 mb-4">{children}</p>;
+    return <p className="text-[#0f172a] dark:text-gray-300 leading-7 mb-4">{children}</p>;
   },
 
   h1({ children }) {
     return (
-      <h1 className="text-xl font-semibold text-white mb-4 mt-6">{children}</h1>
+      <h1 className="text-xl font-semibold text-[#0f172a] dark:text-white mb-4 mt-6">{children}</h1>
     );
   },
 
   h2({ children }) {
     return (
-      <h2 className="text-lg font-semibold text-white mb-3 mt-6">{children}</h2>
+      <h2 className="text-lg font-semibold text-[#0f172a] dark:text-white mb-3 mt-6">{children}</h2>
     );
   },
 
   h3({ children }) {
     return (
-      <h3 className="text-base font-semibold text-white mb-2 mt-5">
+      <h3 className="text-base font-semibold text-[#0f172a] dark:text-white mb-2 mt-5">
         {children}
       </h3>
     );
@@ -57,7 +57,7 @@ export const markdownComponents = {
 
   ul({ children }) {
     return (
-      <ul className="list-disc ml-6 mb-4 space-y-2 text-gray-300">
+      <ul className="list-disc ml-6 mb-4 space-y-2 text-[#0f172a] dark:text-gray-300">
         {children}
       </ul>
     );
@@ -65,14 +65,14 @@ export const markdownComponents = {
 
   ol({ children }) {
     return (
-      <ol className="list-decimal ml-6 mb-4 space-y-2 text-gray-300">
+      <ol className="list-decimal ml-6 mb-4 space-y-2 text-[#0f172a] dark:text-gray-300">
         {children}
       </ol>
     );
   },
 
   strong({ children }) {
-    return <strong className="text-white font-semibold">{children}</strong>;
+    return <strong className="text-black dark:text-white font-semibold">{children}</strong>;
   },
 
   a({ children, href }) {
@@ -90,7 +90,7 @@ export const markdownComponents = {
 
   blockquote({ children }) {
     return (
-      <blockquote className="border-l-2 border-[#2DD4BF] pl-4 my-4 text-gray-400 italic">
+      <blockquote className="border-l-2 border-[#2DD4BF] pl-4 my-4 text-gray-600 dark:text-gray-400 italic">
         {children}
       </blockquote>
     );

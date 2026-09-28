@@ -4,7 +4,7 @@ const contestSchema = new mongoose.Schema({
   platform: { 
     type: String, 
     required: true 
-  }, // e.g., 'LeetCode', 'Codeforces', 'CodeChef'
+  }, 
   contestName: { 
     type: String, 
     required: true, 

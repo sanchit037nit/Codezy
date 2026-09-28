@@ -1,39 +1,31 @@
 import mongoose from "mongoose";
 
 const reportSchema = new mongoose.Schema(
-{
-    reporter:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"User",
-        required:true
+  {
+    reporter: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
 
-    post:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Solution",
-        required:true
+    post: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Solution",
+      required: true,
     },
 
-    reason:{
+    reason: {
+      type: String,
+      enum: ["Spam", "Abusive", "Not Coding Related", "Duplicate"],
+      required: true,
+    },
+  },
 
-        type:String,
-        enum:[
-            "Spam",
-            "Abusive",
-            "Not Coding Related",
-            "Duplicate"
-        ],
-        required:true
-
-    }
-},
-
-{
-    timestamps:true
-}
-
+  {
+    timestamps: true,
+  },
 );
 
-const Report=mongoose.model("Report",reportSchema);
+const Report = mongoose.model("Report", reportSchema);
 
 export default Report;
