@@ -4,22 +4,14 @@ import { Contest } from "../models/contest.model.js";
 import { ContestGroup } from "../models/contestGroup.model.js";
 
 // Kontests API provides a free list of upcoming competitive programming contests
-const KONTESTS_API_URL = "https://kontests.net/api/v1/all";
 const CODEFORCES_API_URL = "https://codeforces.com/api/contest.list";
 
 const fetchContestsJob = async () => {
-  console.log("⏳ [Worker] Fetching upcoming contests from Kontests API...");
+  console.log("⏳ [Worker] Fetching upcoming contests from Codeforces API...");
   try {
     let contests = [];
     
     try {
-      // Primary API
-      const response = await axios.get(KONTESTS_API_URL, { timeout: 10000 });
-      contests = response.data.filter(c => c.status === "BEFORE");
-    } catch (apiError) {
-      console.warn("⚠️ [Worker] Kontests API failed or timed out. Falling back to Codeforces API...");
-      
-      // Fallback API (Codeforces)
       const cfResponse = await axios.get(CODEFORCES_API_URL, { timeout: 10000 });
       if (cfResponse.data.status === "OK") {
         // Map Codeforces data structure to match our expected format
@@ -35,6 +27,8 @@ const fetchContestsJob = async () => {
           }))
           .slice(0, 15); // limit to top 15 upcoming codeforces to avoid overloading DB
       }
+    } catch (apiError) {
+      console.warn("⚠️ [Worker] Codeforces API failed or timed out.");
     }
     
     let newGroupsCount = 0;

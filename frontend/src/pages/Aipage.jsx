@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import Editor from "@monaco-editor/react";
-import { Send, Code2 } from "lucide-react";
+import { Send, Code2, Paperclip } from "lucide-react";
 
 import { useSolution } from "../store/useSolutionstore";
 import { useThemeStore } from "../store/useThemeStore";
@@ -30,18 +29,20 @@ const Ask = () => {
   }, []);
 
   const [question, setQuestion] = useState("");
-  const [showCode, setShowCode] = useState(false);
+  const fileInputRef = useRef(null);
 
-  const [code, setCode] = useState(
-    `#include <iostream>
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-using namespace std;
-
-int main() {
-    cout << "Hello Codezy!";
-    return 0;
-}`,
-  );
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const content = event.target.result;
+      setQuestion((prev) => prev + (prev ? "\n\n" : "") + `File: ${file.name}\n\`\`\`\n${content}\n\`\`\``);
+    };
+    reader.readAsText(file);
+    e.target.value = null; 
+  };
 
   const handleAsk = async () => {
     if (!question.trim() || loading) return;
@@ -172,20 +173,19 @@ int main() {
 
                 {/* Bottom Controls */}
                 <div className="flex items-center justify-between mt-3">
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileUpload}
+                    className="hidden"
+                    accept=".js,.jsx,.ts,.tsx,.py,.cpp,.c,.java,.txt,.md"
+                  />
                   <button
-                    onClick={() => setShowCode(!showCode)}
-                    className={`
-                                            flex items-center gap-2 px-3 py-2 rounded-md text-xs transition
-                                            ${
-                                              showCode
-                                                ? "bg-[#fdf6e3] dark:bg-[#10141F] text-[#0f172a] dark:text-[#E6E8EB] border border-black/20 dark:border-white/20"
-                                                : "bg-black/5 dark:bg-white/5 text-gray-600 dark:text-gray-400 border border-black/10 dark:border-white/10 hover:bg-[#fdf6e3] dark:bg-[#10141F]"
-                                            }
-                                        `}
+                    onClick={() => fileInputRef.current?.click()}
+                    className="flex items-center gap-2 px-3 py-2 rounded-md text-xs transition bg-black/5 dark:bg-white/5 text-gray-600 dark:text-gray-400 border border-black/10 dark:border-white/10 hover:bg-[#fdf6e3] dark:bg-[#10141F]"
                   >
-                    <Code2 size={14} />
-
-                    {showCode ? "Hide Code" : "Attach Code"}
+                    <Paperclip size={14} />
+                    Upload File
                   </button>
 
                   <button
@@ -200,37 +200,7 @@ int main() {
                 </div>
               </div>
 
-              {/* ================= CODE EDITOR ================= */}
-              {showCode && (
-                <div className="border-b border-black/10 dark:border-white/10">
-                  <div className="px-4 py-2 bg-[#f8fafc] dark:bg-[#0B0E14] border-b border-black/5 dark:border-white/5 flex items-center justify-between">
-                    <span className="text-xs text-[#8B8FA3]">
-                      Attached Code
-                    </span>
-
-                    <span className="text-xs text-[#64748b] dark:text-[#5C6370]">C++</span>
-                  </div>
-
-                  <Editor
-                    height="300px"
-                    defaultLanguage="cpp"
-                    theme={theme === "dark" ? "vs-dark" : "vs-light"}
-                    value={code}
-                    onChange={(value) => setCode(value || "")}
-                    options={{
-                      minimap: {
-                        enabled: false,
-                      },
-                      fontSize: 14,
-                      lineNumbers: "on",
-                      padding: {
-                        top: 12,
-                      },
-                      scrollBeyondLastLine: false,
-                    }}
-                  />
-                </div>
-              )}
+              {/* Removed Code Editor */}
 
               {/* ================= RESPONSE ================= */}
 
