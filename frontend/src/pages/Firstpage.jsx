@@ -12,7 +12,6 @@ export const Firstpage = () => {
 
   return (
     <div className="relative min-h-screen bg-[#f8fafc] dark:bg-[#0B0E14] text-[#0f172a] dark:text-[#E6E8EB] overflow-hidden font-mono">
-
       {/* subtle grid texture instead of glowing particles */}
       <div
         className="absolute inset-0 opacity-[0.04]"
@@ -48,7 +47,11 @@ export const Firstpage = () => {
             onClick={toggleTheme}
             className="flex items-center justify-center w-8 h-8 rounded-full border border-black/10 dark:border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-[#fdf6e3] dark:bg-[#10141F] transition-colors shadow-sm"
           >
-            {theme === "dark" ? <FaSun size={14} className="text-[#F5A623]" /> : <FaMoon size={14} className="text-[#8B7FD6]" />}
+            {theme === "dark" ? (
+              <FaSun size={14} className="text-[#F5A623]" />
+            ) : (
+              <FaMoon size={14} className="text-[#8B7FD6]" />
+            )}
           </button>
           <button
             onClick={() => navigate("/login")}
@@ -83,10 +86,14 @@ export const Firstpage = () => {
 
           {/* code body */}
           <div className="px-6 py-8 text-lg leading-relaxed">
-            <p className="text-[#64748b] dark:text-[#5C6370]">// a home for developers</p>
+            <p className="text-[#64748b] dark:text-[#5C6370]">
+              // a home for developers
+            </p>
             <p className="mt-1">
               <span className="text-[#8B7FD6]">const</span>{" "}
-              <span className="text-[#0f172a] dark:text-[#E6E8EB]">welcome</span>{" "}
+              <span className="text-[#0f172a] dark:text-[#E6E8EB]">
+                welcome
+              </span>{" "}
               <span className="text-[#64748b] dark:text-[#5C6370]">=</span>{" "}
               <span className="text-[#2DD4BF]">
                 "

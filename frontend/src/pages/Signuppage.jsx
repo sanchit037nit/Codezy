@@ -45,7 +45,6 @@ export const Signuppage = () => {
 
   return (
     <div className="relative flex justify-center items-center min-h-screen w-screen bg-[#f8fafc] dark:bg-[#0B0E14] text-[#0f172a] dark:text-[#E6E8EB] overflow-hidden font-mono">
-
       {/* subtle grid texture, consistent with landing + login pages */}
       <div
         className="absolute inset-0 opacity-[0.04]"
@@ -88,9 +87,7 @@ export const Signuppage = () => {
 
           {/* Name */}
           <div className="space-y-2 pl-4">
-            <label className="text-xs text-[#8B8FA3] tracking-wide">
-              name
-            </label>
+            <label className="text-xs text-[#8B8FA3] tracking-wide">name</label>
             <div className="flex items-center bg-[#f8fafc] dark:bg-[#0B0E14] border border-black/10 dark:border-white/10 rounded-md px-3 focus-within:border-[#F5A623]/50 transition-colors">
               <User className="text-[#64748b] dark:text-[#5C6370] w-4 h-4 shrink-0" />
               <input

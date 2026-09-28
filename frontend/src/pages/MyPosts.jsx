@@ -2,15 +2,27 @@ import React, { useEffect, useState } from "react";
 import { useSolution } from "../store/useSolutionstore";
 import { useAuthstore } from "../store/useAuthstore";
 import { motion } from "framer-motion";
-import { FaRegHeart, FaTrash, FaRegComment, FaRegBookmark } from "react-icons/fa";
+import {
+  FaRegHeart,
+  FaTrash,
+  FaRegComment,
+  FaRegBookmark,
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineReport } from "react-icons/md";
 import PostCard from "../../components/PostCard";
 import ReportModal from "../../components/ReportModal";
 
-
 const MyPosts = () => {
-  const { getmysol, mysols, deletesol, inclikes, bookmark, handlecomment, selectedpost } = useSolution();
+  const {
+    getmysol,
+    mysols,
+    deletesol,
+    inclikes,
+    bookmark,
+    handlecomment,
+    selectedpost,
+  } = useSolution();
   const { authUser } = useAuthstore();
   const id = authUser._id;
   const [comm, setComment] = useState("");
@@ -52,7 +64,6 @@ const MyPosts = () => {
 
   return (
     <div className="relative min-h-screen w-full bg-[#f8fafc] dark:bg-[#0B0E14] text-[#0f172a] dark:text-[#E6E8EB] flex flex-col items-center p-6 font-mono overflow-hidden">
-
       {/* subtle grid texture, consistent with the rest of the app */}
       <div
         className="absolute inset-0 opacity-[0.04] pointer-events-none"
@@ -64,7 +75,6 @@ const MyPosts = () => {
       />
 
       <div className="relative z-10 w-full max-w-3xl flex flex-col items-center">
-
         <div className="w-full flex items-center gap-2 border-b border-black/10 dark:border-white/10 pb-4 mb-6">
           <span className="text-[#F5A623]">&gt;</span>
           <h2 className="text-xl font-bold tracking-tight">my_posts</h2>
@@ -80,7 +90,6 @@ const MyPosts = () => {
         )}
 
         <div className="flex flex-col items-center gap-4 w-full">
-
           {mysols?.map((post) =>
             post.isHidden ? (
               <div
@@ -91,25 +100,21 @@ const MyPosts = () => {
               </div>
             ) : (
               <PostCard
-  key={post._id}
-  post={post}
-  authUser={authUser}
-  onPostClick={handlepost}
-  handleComment={(post) => {
-    console.log(post);
-  }}
-  handleLike={handleLikePost}
-  handleBookmark={handlebook}
-  handleDelete={handleDelete}
-  showReport={false}
-/>
-            )
+                key={post._id}
+                post={post}
+                authUser={authUser}
+                onPostClick={handlepost}
+                handleComment={(post) => {
+                  console.log(post);
+                }}
+                handleLike={handleLikePost}
+                handleBookmark={handlebook}
+                handleDelete={handleDelete}
+                showReport={false}
+              />
+            ),
           )}
-
         </div>
-
-
-
       </div>
     </div>
   );

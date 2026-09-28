@@ -3,7 +3,13 @@ import { useAuthstore } from "../store/useAuthstore.js";
 import { useNavigate } from "react-router-dom";
 import { useSolution } from "../store/useSolutionstore.js";
 import { useThemeStore } from "../store/useThemeStore.js";
-import { FaRegHeart, FaTrash, FaRegComment, FaMoon, FaSun } from "react-icons/fa";
+import {
+  FaRegHeart,
+  FaTrash,
+  FaRegComment,
+  FaMoon,
+  FaSun,
+} from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 import PostCard from "../../components/PostCard";
@@ -11,10 +17,17 @@ import ReportModal from "../../components/ReportModal";
 import { useReportStore } from "../store/useReportStore";
 
 export const Homepage = () => {
-
   const { authUser } = useAuthstore();
   const { reportPost } = useReportStore();
-  const { getsol, solutions, deletesol, inclikes, bookmark, handlecomment, selectedpost } = useSolution();
+  const {
+    getsol,
+    solutions,
+    deletesol,
+    inclikes,
+    bookmark,
+    handlecomment,
+    selectedpost,
+  } = useSolution();
   const navigate = useNavigate();
   const [search, setsearch] = useState("");
   const [comm, setComment] = useState("");
@@ -23,7 +36,7 @@ export const Homepage = () => {
   const id = authUser?._id;
   const [openReport, setOpenReport] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
-  
+
   const { theme, toggleTheme } = useThemeStore();
 
   useEffect(() => {
@@ -31,13 +44,9 @@ export const Homepage = () => {
   }, [id, getsol, solutions]);
 
   useEffect(() => {
-
     if (authUser?.role === "admin") {
-
       navigate("/admin/dashboard");
-
     }
-
   }, [authUser, navigate]);
 
   const handleLikePost = (id) => {
@@ -59,19 +68,15 @@ export const Homepage = () => {
   };
 
   const submitReport = async (reason) => {
-
     if (!selectedPost) return;
 
     const success = await reportPost(selectedPost._id, reason);
 
     if (success) {
-
       setOpenReport(false);
 
       setSelectedPost(null);
-
     }
-
   };
 
   const handlePostComment = (e, id, data) => {
@@ -107,10 +112,11 @@ export const Homepage = () => {
       {/* Search bar — styled as a filter toolbar / command bar */}
       <div className="sticky top-0 z-20 backdrop-blur-xl bg-white/[0.02] border-b border-black/10 dark:border-white/10 shadow-lg">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 p-4 max-w-6xl mx-auto">
-          
           <div className="flex flex-1 items-center gap-3 w-full">
             <div className="flex-1 max-w-xl flex items-center bg-black/5 dark:bg-white/5 backdrop-blur-md border border-black/10 dark:border-white/10 rounded-xl px-4 py-1 shadow-inner focus-within:border-[#2DD4BF]/50 focus-within:ring-1 focus-within:ring-[#2DD4BF]/30 transition-all">
-              <span className="text-[#64748b] dark:text-[#5C6370] text-sm mr-2">$</span>
+              <span className="text-[#64748b] dark:text-[#5C6370] text-sm mr-2">
+                $
+              </span>
               <input
                 type="text"
                 placeholder="Search solutions..."
@@ -127,10 +133,27 @@ export const Homepage = () => {
                 e.target.value === "" ? setsort(null) : setsort(e.target.value)
               }
             >
-              <option value="" className="bg-[#f8fafc] dark:bg-[#0B0E14]">All platforms</option>
-              <option value="Codeforces" className="bg-[#f8fafc] dark:bg-[#0B0E14]">Codeforces</option>
-              <option value="Leetcode" className="bg-[#f8fafc] dark:bg-[#0B0E14]">Leetcode</option>
-              <option value="Atcoder" className="bg-[#f8fafc] dark:bg-[#0B0E14]">Atcoder</option>
+              <option value="" className="bg-[#f8fafc] dark:bg-[#0B0E14]">
+                All platforms
+              </option>
+              <option
+                value="Codeforces"
+                className="bg-[#f8fafc] dark:bg-[#0B0E14]"
+              >
+                Codeforces
+              </option>
+              <option
+                value="Leetcode"
+                className="bg-[#f8fafc] dark:bg-[#0B0E14]"
+              >
+                Leetcode
+              </option>
+              <option
+                value="Atcoder"
+                className="bg-[#f8fafc] dark:bg-[#0B0E14]"
+              >
+                Atcoder
+              </option>
             </select>
 
             <select
@@ -140,11 +163,21 @@ export const Homepage = () => {
                 e.target.value === "" ? setlang(null) : setlang(e.target.value)
               }
             >
-              <option value="" className="bg-[#f8fafc] dark:bg-[#0B0E14]">All languages</option>
-              <option value="C" className="bg-[#f8fafc] dark:bg-[#0B0E14]">C</option>
-              <option value="C++" className="bg-[#f8fafc] dark:bg-[#0B0E14]">C++</option>
-              <option value="Python" className="bg-[#f8fafc] dark:bg-[#0B0E14]">Python</option>
-              <option value="Java" className="bg-[#f8fafc] dark:bg-[#0B0E14]">Java</option>
+              <option value="" className="bg-[#f8fafc] dark:bg-[#0B0E14]">
+                All languages
+              </option>
+              <option value="C" className="bg-[#f8fafc] dark:bg-[#0B0E14]">
+                C
+              </option>
+              <option value="C++" className="bg-[#f8fafc] dark:bg-[#0B0E14]">
+                C++
+              </option>
+              <option value="Python" className="bg-[#f8fafc] dark:bg-[#0B0E14]">
+                Python
+              </option>
+              <option value="Java" className="bg-[#f8fafc] dark:bg-[#0B0E14]">
+                Java
+              </option>
             </select>
           </div>
 
@@ -154,7 +187,11 @@ export const Homepage = () => {
             onClick={toggleTheme}
             className="flex items-center justify-center w-11 h-11 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 backdrop-blur-md text-[#0f172a] dark:text-[#E6E8EB] hover:bg-[#fdf6e3] dark:bg-[#10141F] transition-colors shadow-lg"
           >
-            {theme === "dark" ? <FaSun size={18} className="text-[#F5A623]" /> : <FaMoon size={18} className="text-[#8B7FD6]" />}
+            {theme === "dark" ? (
+              <FaSun size={18} className="text-[#F5A623]" />
+            ) : (
+              <FaMoon size={18} className="text-[#8B7FD6]" />
+            )}
           </motion.button>
         </div>
       </div>
@@ -163,15 +200,15 @@ export const Homepage = () => {
       <div className="relative z-10 flex flex-col items-center px-4 pt-6 pb-6 gap-4">
         {solutions
           ?.filter((post) =>
-            post.doubt?.toLowerCase().includes(search?.toLowerCase())
+            post.doubt?.toLowerCase().includes(search?.toLowerCase()),
           )
           .filter(
             (post) =>
-              !sort || post.platform?.toLowerCase() === sort?.toLowerCase()
+              !sort || post.platform?.toLowerCase() === sort?.toLowerCase(),
           )
           .filter(
             (post) =>
-              !lang || post.language?.toLowerCase() === lang?.toLowerCase()
+              !lang || post.language?.toLowerCase() === lang?.toLowerCase(),
           )
           .filter((post) => post.isHidden == false)
           .map((post) => (
@@ -207,7 +244,8 @@ export const Homepage = () => {
             whileTap={{ scale: 0.95 }}
             className="relative flex items-center gap-2 bg-gradient-to-r from-[#2DD4BF] to-[#0D9488] text-white px-6 py-3.5 rounded-full font-semibold shadow-[0_10px_20px_rgba(45,212,191,0.3)] hover:shadow-[0_15px_25px_rgba(45,212,191,0.4)] transition-all"
           >
-            <span className="text-xl leading-none font-bold">+</span> Upload Doubt
+            <span className="text-xl leading-none font-bold">+</span> Upload
+            Doubt
           </motion.button>
         </div>
       )}

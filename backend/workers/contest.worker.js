@@ -10,36 +10,42 @@ const fetchContestsJob = async () => {
   console.log("⏳ [Worker] Fetching upcoming contests from Codeforces API...");
   try {
     let contests = [];
-    
+
     try {
-      const cfResponse = await axios.get(CODEFORCES_API_URL, { timeout: 10000 });
+      const cfResponse = await axios.get(CODEFORCES_API_URL, {
+        timeout: 10000,
+      });
       if (cfResponse.data.status === "OK") {
         // Map Codeforces data structure to match our expected format
         contests = cfResponse.data.result
-          .filter(c => c.phase === "BEFORE")
-          .map(c => ({
+          .filter((c) => c.phase === "BEFORE")
+          .map((c) => ({
             name: c.name,
             site: "Codeforces",
             url: `https://codeforces.com/contest/${c.id}`,
             start_time: new Date(c.startTimeSeconds * 1000).toISOString(),
-            end_time: new Date((c.startTimeSeconds + c.durationSeconds) * 1000).toISOString(),
-            status: "BEFORE"
+            end_time: new Date(
+              (c.startTimeSeconds + c.durationSeconds) * 1000,
+            ).toISOString(),
+            status: "BEFORE",
           }))
           .slice(0, 15); // limit to top 15 upcoming codeforces to avoid overloading DB
       }
     } catch (apiError) {
       console.warn("⚠️ [Worker] Codeforces API failed or timed out.");
     }
-    
+
     let newGroupsCount = 0;
 
     for (const contestData of contests) {
       // Only process upcoming contests
-      if (contestData.status !== "BEFORE") continue; 
+      if (contestData.status !== "BEFORE") continue;
 
       // Check if contest already exists in our DB to prevent duplicates
-      const existingContest = await Contest.findOne({ contestName: contestData.name });
-      
+      const existingContest = await Contest.findOne({
+        contestName: contestData.name,
+      });
+
       if (!existingContest) {
         // 1. Create Contest Record
         const newContest = await Contest.create({
@@ -48,7 +54,7 @@ const fetchContestsJob = async () => {
           url: contestData.url,
           startTime: new Date(contestData.start_time),
           endTime: new Date(contestData.end_time),
-          status: "UPCOMING"
+          status: "UPCOMING",
         });
 
         // 2. Auto-Generate Contest Group for users to chat/post solutions
@@ -57,47 +63,54 @@ const fetchContestsJob = async () => {
           name: `${contestData.site} - ${contestData.name}`,
           participants: [],
           messages: [],
-          status: "ACTIVE" 
+          status: "ACTIVE",
         });
 
         newGroupsCount++;
-        
+
         if (global.io) {
           global.io.emit("new_contest_group", newContest);
         }
       }
     }
 
-    console.log(`✅ [Worker] Fetched and stored ${newGroupsCount} new contest(s) and auto-generated groups.`);
+    console.log(
+      `✅ [Worker] Fetched and stored ${newGroupsCount} new contest(s) and auto-generated groups.`,
+    );
 
     // 3. Lifecycle Management: Activate live contests & Archive ended contests
     console.log("⏳ [Worker] Updating contest lifecycle states...");
     const now = new Date();
-    
+
     // A. Activate contests that have started
     const liveContests = await Contest.find({
       startTime: { $lte: now },
       endTime: { $gt: now },
-      status: "UPCOMING"
+      status: "UPCOMING",
     });
 
     for (const contest of liveContests) {
       contest.status = "ACTIVE";
       await contest.save();
-      
+
       if (global.io) {
-        global.io.emit("contest_live", { contestId: contest._id, name: contest.contestName });
+        global.io.emit("contest_live", {
+          contestId: contest._id,
+          name: contest.contestName,
+        });
       }
     }
-    
+
     if (liveContests.length > 0) {
-      console.log(`✅ [Worker] Activated ${liveContests.length} live contest(s).`);
+      console.log(
+        `✅ [Worker] Activated ${liveContests.length} live contest(s).`,
+      );
     }
 
     // B. Archive contests that have ended
     const endedContests = await Contest.find({
       endTime: { $lt: now },
-      status: { $ne: "ARCHIVED" }
+      status: { $ne: "ARCHIVED" },
     });
 
     for (const contest of endedContests) {
@@ -110,11 +123,12 @@ const fetchContestsJob = async () => {
         await group.save();
       }
     }
-    
-    if (endedContests.length > 0) {
-      console.log(`✅ [Worker] Archived ${endedContests.length} past contest(s) and their groups.`);
-    }
 
+    if (endedContests.length > 0) {
+      console.log(
+        `✅ [Worker] Archived ${endedContests.length} past contest(s) and their groups.`,
+      );
+    }
   } catch (error) {
     console.error("❌ [Worker] Error fetching contests:", error.message);
   }

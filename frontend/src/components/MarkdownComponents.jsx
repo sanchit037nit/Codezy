@@ -32,18 +32,26 @@ export const markdownComponents = {
   },
 
   p({ children }) {
-    return <p className="text-[#0f172a] dark:text-gray-300 leading-7 mb-4">{children}</p>;
+    return (
+      <p className="text-[#0f172a] dark:text-gray-300 leading-7 mb-4">
+        {children}
+      </p>
+    );
   },
 
   h1({ children }) {
     return (
-      <h1 className="text-xl font-semibold text-[#0f172a] dark:text-white mb-4 mt-6">{children}</h1>
+      <h1 className="text-xl font-semibold text-[#0f172a] dark:text-white mb-4 mt-6">
+        {children}
+      </h1>
     );
   },
 
   h2({ children }) {
     return (
-      <h2 className="text-lg font-semibold text-[#0f172a] dark:text-white mb-3 mt-6">{children}</h2>
+      <h2 className="text-lg font-semibold text-[#0f172a] dark:text-white mb-3 mt-6">
+        {children}
+      </h2>
     );
   },
 
@@ -72,7 +80,11 @@ export const markdownComponents = {
   },
 
   strong({ children }) {
-    return <strong className="text-black dark:text-white font-semibold">{children}</strong>;
+    return (
+      <strong className="text-black dark:text-white font-semibold">
+        {children}
+      </strong>
+    );
   },
 
   a({ children, href }) {

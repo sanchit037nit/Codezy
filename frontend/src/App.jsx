@@ -36,12 +36,11 @@ import Sidebar from "../components/Sidebar";
 import { useContestStore } from "./store/useContestStore.js";
 
 const App = () => {
-
   const { authUser, checkauth, loading } = useAuthstore();
   const { initTheme } = useThemeStore();
   const { connectSocket, disconnectSocket } = useContestStore();
-  
-  console.log(authUser)
+
+  console.log(authUser);
   useEffect(() => {
     checkauth();
     initTheme();
@@ -66,277 +65,257 @@ const App = () => {
 
   return (
     <div className="flex ">
-    
       {/* Sidebar only for Users */}
       {authUser && authUser.role === "user" && <Sidebar />}
 
-<main
-  className={`flex-1 ${
-    authUser
-      ? authUser.role === "user"
-        ? "ml-64"
-        : authUser.role === "admin"
-        ? "ml-64"
-        : ""
-      : ""
-  }`}
->
-        
-  
-      <Routes>
+      <main
+        className={`flex-1 ${
+          authUser
+            ? authUser.role === "user"
+              ? "ml-64"
+              : authUser.role === "admin"
+              ? "ml-64"
+              : ""
+            : ""
+        }`}
+      >
+        <Routes>
+          {/* ================= PUBLIC ROUTES ================= */}
 
-        {/* ================= PUBLIC ROUTES ================= */}
+          <Route path="/" element={<Firstpage />} />
 
-        <Route path="/" element={<Firstpage />} />
+          <Route
+            path="/signup"
+            element={
+              !authUser ? (
+                <Signuppage />
+              ) : (
+                <Navigate
+                  to={
+                    authUser.role === "admin" ? "/admin/dashboard" : "/Homepage"
+                  }
+                />
+              )
+            }
+          />
 
-        <Route
-          path="/signup"
-          element={
-            !authUser ? (
-              <Signuppage />
-            ) : (
+          <Route
+            path="/login"
+            element={
+              !authUser ? (
+                <Loginpage />
+              ) : (
+                <Navigate
+                  to={
+                    authUser.role === "admin" ? "/admin/dashboard" : "/Homepage"
+                  }
+                />
+              )
+            }
+          />
+
+          {/* ================= USER ROUTES ================= */}
+
+          <Route
+            path="/Homepage"
+            element={
+              authUser ? (
+                authUser.role === "user" ? (
+                  <Homepage />
+                ) : (
+                  <Navigate to="/admin/dashboard" />
+                )
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+
+          <Route
+            path="/upload"
+            element={
+              authUser ? (
+                authUser.role === "user" ? (
+                  <Uploadpage />
+                ) : (
+                  <Navigate to="/admin/dashboard" />
+                )
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+
+          <Route
+            path="/bookmarks"
+            element={
+              authUser ? (
+                authUser.role === "user" ? (
+                  <Bookmarks />
+                ) : (
+                  <Navigate to="/admin/dashboard" />
+                )
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+
+          <Route
+            path="/profile"
+            element={
+              authUser ? (
+                authUser.role === "user" ? (
+                  <Profilepage />
+                ) : (
+                  <Navigate to="/admin/dashboard" />
+                )
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+
+          <Route
+            path="/Aipage"
+            element={
+              authUser ? (
+                authUser.role === "user" ? (
+                  <Aipage />
+                ) : (
+                  <Navigate to="/admin/dashboard" />
+                )
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+
+          <Route
+            path="/Posts"
+            element={
+              authUser ? (
+                authUser.role === "user" ? (
+                  <MyPosts />
+                ) : (
+                  <Navigate to="/admin/dashboard" />
+                )
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+
+          <Route
+            path="/Homepage/view"
+            element={authUser ? <Viewpage /> : <Navigate to="/" />}
+          />
+
+          <Route
+            path="/Posts/view"
+            element={
+              authUser ? (
+                authUser.role === "user" ? (
+                  <Viewpage />
+                ) : (
+                  <Navigate to="/admin/dashboard" />
+                )
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+
+          <Route
+            path="/compiler"
+            element={
+              authUser ? (
+                authUser.role === "user" ? (
+                  <OnlineCompiler />
+                ) : (
+                  <Navigate to="/admin/dashboard" />
+                )
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+
+          {/* Contest Routes */}
+          <Route
+            path="/contests"
+            element={
+              authUser ? (
+                authUser.role === "user" ? (
+                  <Contests />
+                ) : (
+                  <Navigate to="/admin/dashboard" />
+                )
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+
+          <Route
+            path="/contests/:id/chat"
+            element={
+              authUser ? (
+                authUser.role === "user" ? (
+                  <ContestChat />
+                ) : (
+                  <Navigate to="/admin/dashboard" />
+                )
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+
+          {/* ================= ADMIN ROUTES ================= */}
+
+          <Route
+            path="/admin"
+            element={
+              authUser ? (
+                authUser.role === "admin" ? (
+                  <AdminLayout />
+                ) : (
+                  <Navigate to="/Homepage" />
+                )
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          >
+            <Route index element={<Navigate to="dashboard" />} />
+
+            <Route path="dashboard" element={<Dashboard />} />
+
+            <Route path="reports" element={<ReportedPosts />} />
+
+            <Route path="users" element={<Users />} />
+          </Route>
+
+          {/* ================= 404 ================= */}
+
+          <Route
+            path="*"
+            element={
               <Navigate
                 to={
-                  authUser.role === "admin"
-                    ? "/admin/dashboard"
-                    : "/Homepage"
+                  authUser
+                    ? authUser.role === "admin"
+                      ? "/admin/dashboard"
+                      : "/Homepage"
+                    : "/"
                 }
               />
-            )
-          }
-        />
-
-        <Route
-          path="/login"
-          element={
-            !authUser ? (
-              <Loginpage />
-            ) : (
-              <Navigate
-                to={
-                  authUser.role === "admin"
-                    ? "/admin/dashboard"
-                    : "/Homepage"
-                }
-              />
-            )
-          }
-        />
-
-        {/* ================= USER ROUTES ================= */}
-
-        <Route
-          path="/Homepage"
-          element={
-            authUser ? (
-              authUser.role === "user" ? (
-                <Homepage />
-              ) : (
-                <Navigate to="/admin/dashboard" />
-              )
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        />
-
-        <Route
-          path="/upload"
-          element={
-            authUser ? (
-              authUser.role === "user" ? (
-                <Uploadpage />
-              ) : (
-                <Navigate to="/admin/dashboard" />
-              )
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        />
-
-        <Route
-          path="/bookmarks"
-          element={
-            authUser ? (
-              authUser.role === "user" ? (
-                <Bookmarks />
-              ) : (
-                <Navigate to="/admin/dashboard" />
-              )
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        />
-
-        <Route
-          path="/profile"
-          element={
-            authUser ? (
-              authUser.role === "user" ? (
-                <Profilepage />
-              ) : (
-                <Navigate to="/admin/dashboard" />
-              )
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        />
-
-        <Route
-          path="/Aipage"
-          element={
-            authUser ? (
-              authUser.role === "user" ? (
-                <Aipage />
-              ) : (
-                <Navigate to="/admin/dashboard" />
-              )
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        />
-
-        <Route
-          path="/Posts"
-          element={
-            authUser ? (
-              authUser.role === "user" ? (
-                <MyPosts />
-              ) : (
-                <Navigate to="/admin/dashboard" />
-              )
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        />
-
-        <Route
-          path="/Homepage/view"
-          element={
-            authUser ? (
-              
-                <Viewpage />
-            
-
-              
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        />
-
-        <Route
-          path="/Posts/view"
-          element={
-            authUser ? (
-              authUser.role === "user" ? (
-                <Viewpage />
-              ) : (
-                <Navigate to="/admin/dashboard" />
-              )
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        />
-
-        <Route
-          path="/compiler"
-          element={
-            authUser ? (
-              authUser.role === "user" ? (
-                <OnlineCompiler />
-              ) : (
-                <Navigate to="/admin/dashboard" />
-              )
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        />
-
-        {/* Contest Routes */}
-        <Route
-          path="/contests"
-          element={
-            authUser ? (
-              authUser.role === "user" ? (
-                <Contests />
-              ) : (
-                <Navigate to="/admin/dashboard" />
-              )
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        />
-
-        <Route
-          path="/contests/:id/chat"
-          element={
-            authUser ? (
-              authUser.role === "user" ? (
-                <ContestChat />
-              ) : (
-                <Navigate to="/admin/dashboard" />
-              )
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        />
-
-        {/* ================= ADMIN ROUTES ================= */}
-
-        <Route
-          path="/admin"
-          element={
-            authUser ? (
-              authUser.role === "admin" ? (
-                <AdminLayout />
-              ) : (
-                <Navigate to="/Homepage" />
-              )
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        >
-          <Route index element={<Navigate to="dashboard" />} />
-
-          <Route path="dashboard" element={<Dashboard />} />
-
-          <Route path="reports" element={<ReportedPosts />} />
-
-          <Route path="users" element={<Users />} />
-        </Route>
-
-        {/* ================= 404 ================= */}
-
-        <Route
-          path="*"
-          element={
-            <Navigate
-              to={
-                authUser
-                  ? authUser.role === "admin"
-                    ? "/admin/dashboard"
-                    : "/Homepage"
-                  : "/"
-              }
-            />
-          }
-        />
-
-      </Routes>
-    </main>
+            }
+          />
+        </Routes>
+      </main>
       <Toaster />
-
     </div>
   );
 };

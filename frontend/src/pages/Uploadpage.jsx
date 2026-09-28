@@ -1,20 +1,17 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom';
-import { useSolution } from '../store/useSolutionstore';
-import { useAuthstore } from '../store/useAuthstore';
-import { useState } from 'react';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useSolution } from "../store/useSolutionstore";
+import { useAuthstore } from "../store/useAuthstore";
+import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { Camera, Mail, User, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Uploadpage = () => {
-
   const navigate = useNavigate();
   const { createsol } = useSolution();
   const { authUser, updateprofile, isupdatingprofile } = useAuthstore();
   const [selectedImg, setSelectedImg] = useState(null);
-
-
 
   const [formdata, setformdata] = useState({
     doubt: "",
@@ -38,7 +35,7 @@ const Uploadpage = () => {
     reader.onload = async () => {
       const base64Image = reader.result;
       setSelectedImg(base64Image);
-      setformdata({ ...formdata, photo: base64Image })
+      setformdata({ ...formdata, photo: base64Image });
     };
   };
 
@@ -49,7 +46,15 @@ const Uploadpage = () => {
     }
     createsol(formdata);
     navigate("/Homepage");
-    setformdata({ doubt: "", language: "", description: "", platform: "", code: "", link: "", photo: "" });
+    setformdata({
+      doubt: "",
+      language: "",
+      description: "",
+      platform: "",
+      code: "",
+      link: "",
+      photo: "",
+    });
   };
 
   const handlecross = (e) => {
@@ -58,9 +63,7 @@ const Uploadpage = () => {
   };
 
   return (
-
     <div className="relative min-h-screen flex items-center justify-center px-4 w-full bg-[#f8fafc] dark:bg-[#0B0E14] text-[#0f172a] dark:text-[#E6E8EB] font-mono overflow-hidden">
-
       {/* subtle grid texture, consistent with the rest of the app */}
       <div
         className="absolute inset-0 opacity-[0.04] pointer-events-none"
@@ -74,13 +77,17 @@ const Uploadpage = () => {
       {/* Main Container Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-[#F5A623] opacity-[0.03] blur-[100px] rounded-full pointer-events-none" />
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.5, type: "spring", stiffness: 200, damping: 20 }}
+        transition={{
+          duration: 0.5,
+          type: "spring",
+          stiffness: 200,
+          damping: 20,
+        }}
         className="relative z-10 max-w-6xl w-full bg-white/[0.02] backdrop-blur-xl border border-black/10 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden"
       >
-
         {/* tab bar */}
         <div className="flex items-center gap-2 px-4 py-3 bg-black/5 dark:bg-white/5 border-b border-black/10 dark:border-white/10 backdrop-blur-md">
           <span className="w-3 h-3 rounded-full bg-[#F5A623]/70" />
@@ -105,7 +112,6 @@ const Uploadpage = () => {
 
           <form className="space-y-6 w-full">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
-
               {/* Left Section - Image Upload */}
               <div className="flex flex-col items-center gap-4 pl-2">
                 <div className="relative group">
@@ -122,7 +128,11 @@ const Uploadpage = () => {
                       bg-gradient-to-r from-[#F5A623] to-[#ffb43d] hover:scale-110
                       p-3 rounded-full cursor-pointer
                       transition-all duration-300 shadow-[0_0_20px_rgba(245,166,35,0.4)]
-                      ${isupdatingprofile ? "animate-pulse pointer-events-none" : ""}`}
+                      ${
+                        isupdatingprofile
+                          ? "animate-pulse pointer-events-none"
+                          : ""
+                      }`}
                   >
                     <Camera className="w-5 h-5 text-[#0B0E14]" />
                     <input
@@ -136,7 +146,9 @@ const Uploadpage = () => {
                   </label>
                 </div>
                 <p className="text-sm text-[#64748b] dark:text-[#5C6370] text-center">
-                  {isupdatingprofile ? "Uploading..." : "Click the camera icon to add a photo"}
+                  {isupdatingprofile
+                    ? "Uploading..."
+                    : "Click the camera icon to add a photo"}
                 </p>
               </div>
 
@@ -144,7 +156,10 @@ const Uploadpage = () => {
               <div className="space-y-4 pl-4">
                 <div>
                   <label className="text-xs text-[#8B8FA3] tracking-wide block mb-1.5">
-                    doubt <span className="text-[#64748b] dark:text-[#5C6370]">// contest / problem name</span>
+                    doubt{" "}
+                    <span className="text-[#64748b] dark:text-[#5C6370]">
+                      // contest / problem name
+                    </span>
                   </label>
                   <input
                     type="text"
@@ -226,7 +241,10 @@ const Uploadpage = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="website" className="text-xs text-[#8B8FA3] tracking-wide block mb-1.5">
+                  <label
+                    htmlFor="website"
+                    className="text-xs text-[#8B8FA3] tracking-wide block mb-1.5"
+                  >
                     link
                   </label>
                   <input
@@ -264,6 +282,6 @@ const Uploadpage = () => {
       </motion.div>
     </div>
   );
-}
+};
 
-export default Uploadpage
+export default Uploadpage;

@@ -4,7 +4,6 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import AdminSidebar from "../../../components/AdminSidebar";
 
-
 // AdminLayout.jsx
 const AdminLayout = () => {
   return (

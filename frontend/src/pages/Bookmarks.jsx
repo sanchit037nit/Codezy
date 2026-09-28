@@ -1,9 +1,14 @@
-import React from 'react'
-import { useSolution } from '../store/useSolutionstore.js';
-import { useAuthstore } from '../store/useAuthstore.js'
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useSolution } from "../store/useSolutionstore.js";
+import { useAuthstore } from "../store/useAuthstore.js";
+import { useNavigate } from "react-router-dom";
 
-import { FaRegComment, FaRegHeart, FaRegBookmark, FaTrash } from "react-icons/fa";
+import {
+  FaRegComment,
+  FaRegHeart,
+  FaRegBookmark,
+  FaTrash,
+} from "react-icons/fa";
 import { motion } from "framer-motion";
 
 import { useEffect, useState } from "react";
@@ -11,16 +16,23 @@ import PostCard from "../../components/PostCard";
 import ReportModal from "../../components/ReportModal";
 
 const Bookmarks = () => {
-  const { authUser } = useAuthstore()
-  const { bookmarks, getbookmark, inclikes, bookmark, deletesol, selectedpost } = useSolution()
+  const { authUser } = useAuthstore();
+  const {
+    bookmarks,
+    getbookmark,
+    inclikes,
+    bookmark,
+    deletesol,
+    selectedpost,
+  } = useSolution();
   const navigate = useNavigate();
   const [openReport, setOpenReport] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
-  const id = authUser._id
+  const id = authUser._id;
 
   useEffect(() => {
-    getbookmark()
-  }, [])
+    getbookmark();
+  }, []);
 
   const handleLikePost = (id) => {
     inclikes(id);
@@ -51,7 +63,6 @@ const Bookmarks = () => {
 
   return (
     <div className="relative flex flex-col items-center w-full p-6 gap-4 bg-[#f8fafc] dark:bg-[#0B0E14] text-[#0f172a] dark:text-[#E6E8EB] min-h-screen font-mono overflow-hidden">
-
       {/* subtle grid texture, consistent with the rest of the app */}
       <div
         className="absolute inset-0 opacity-[0.04] pointer-events-none"
@@ -63,7 +74,6 @@ const Bookmarks = () => {
       />
 
       <div className="relative z-10 w-full max-w-3xl flex flex-col items-center">
-
         <div className="w-full flex items-center gap-2 border-b border-black/10 dark:border-white/10 pb-4 mb-6">
           <span className="text-[#F5A623]">&gt;</span>
           <h2 className="text-xl font-bold tracking-tight">bookmarks</h2>
@@ -104,10 +114,9 @@ const Bookmarks = () => {
           onClose={() => setOpenReport(false)}
           onSubmit={submitReport}
         />
-
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Bookmarks
+export default Bookmarks;

@@ -49,10 +49,15 @@ const Ask = () => {
     const reader = new FileReader();
     reader.onload = (event) => {
       const content = event.target.result;
-      setQuestion((prev) => prev + (prev ? "\n\n" : "") + `File: ${file.name}\n\`\`\`\n${content}\n\`\`\``);
+      setQuestion(
+        (prev) =>
+          prev +
+          (prev ? "\n\n" : "") +
+          `File: ${file.name}\n\`\`\`\n${content}\n\`\`\``,
+      );
     };
     reader.readAsText(file);
-    e.target.value = null; 
+    e.target.value = null;
   };
 
   const handleAsk = async () => {
@@ -164,10 +169,14 @@ const Ask = () => {
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-[#2DD4BF] shadow-[0_0_8px_#2DD4BF]" />
 
-                  <span className="text-sm text-[#0f172a] dark:text-gray-200 font-medium tracking-wide">Codezy AI</span>
+                  <span className="text-sm text-[#0f172a] dark:text-gray-200 font-medium tracking-wide">
+                    Codezy AI
+                  </span>
                 </div>
 
-                <span className="text-[10px] uppercase tracking-widest text-[#2DD4BF] bg-[#2DD4BF]/10 px-2 py-1 rounded-full border border-[#2DD4BF]/20">RAG powered</span>
+                <span className="text-[10px] uppercase tracking-widest text-[#2DD4BF] bg-[#2DD4BF]/10 px-2 py-1 rounded-full border border-[#2DD4BF]/20">
+                  RAG powered
+                </span>
               </div>
 
               {/* ================= QUESTION ================= */}
@@ -199,7 +208,9 @@ const Ask = () => {
                       <Paperclip size={14} />
                       Upload File
                     </button>
-                    <span className="text-[10px] text-[#64748b] dark:text-[#5C6370]">Max PDF size: 5MB</span>
+                    <span className="text-[10px] text-[#64748b] dark:text-[#5C6370]">
+                      Max PDF size: 5MB
+                    </span>
                   </div>
 
                   <button
@@ -218,207 +229,180 @@ const Ask = () => {
 
               {/* ================= RESPONSE ================= */}
 
-{/* ================= RESPONSE ================= */}
-<div className="p-5">
+              {/* ================= RESPONSE ================= */}
+              <div className="p-5">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-[#8B93A7] text-xs tracking-widest uppercase">
+                    AI Response
+                  </p>
 
-  <div className="flex items-center justify-between mb-3">
-
-    <p className="text-[#8B93A7] text-xs tracking-widest uppercase">
-      AI Response
-    </p>
-
-    {loading && (
-      <span className="text-xs text-[#64748b] dark:text-[#5C6370]">
-        Generating...
-      </span>
-    )}
-
-  </div>
-
-  <div className="bg-[#f8fafc] dark:bg-[#0B0E14] rounded-md p-6 max-h-[500px] overflow-y-auto border border-black/10 dark:border-white/10">
-
-    {/* ================= CONVERSATION HISTORY ================= */}
-
-    {aiHistory.length > 0 && (
-
-      <div className="space-y-6">
-
-        {aiHistory.map((message, index) => (
-
-          <div key={index}>
-
-            {/* USER MESSAGE */}
-            {message.role === "user" && (
-              <motion.div 
-                initial={{ opacity: 0, y: 15, scale: 0.98 }} 
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                className="mb-6 flex flex-col items-end"
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <p className="text-[#64748b] dark:text-[#5C6370] text-[10px] uppercase tracking-widest font-semibold">You</p>
+                  {loading && (
+                    <span className="text-xs text-[#64748b] dark:text-[#5C6370]">
+                      Generating...
+                    </span>
+                  )}
                 </div>
-                <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md border border-black/10 dark:border-white/10 rounded-2xl rounded-tr-sm px-5 py-3 text-sm text-[#0f172a] dark:text-gray-200 shadow-lg max-w-[85%]">
-                  {message.content}
+
+                <div className="bg-[#f8fafc] dark:bg-[#0B0E14] rounded-md p-6 max-h-[500px] overflow-y-auto border border-black/10 dark:border-white/10">
+                  {/* ================= CONVERSATION HISTORY ================= */}
+
+                  {aiHistory.length > 0 && (
+                    <div className="space-y-6">
+                      {aiHistory.map((message, index) => (
+                        <div key={index}>
+                          {/* USER MESSAGE */}
+                          {message.role === "user" && (
+                            <motion.div
+                              initial={{ opacity: 0, y: 15, scale: 0.98 }}
+                              animate={{ opacity: 1, y: 0, scale: 1 }}
+                              transition={{
+                                type: "spring",
+                                stiffness: 400,
+                                damping: 25,
+                              }}
+                              className="mb-6 flex flex-col items-end"
+                            >
+                              <div className="flex items-center gap-2 mb-2">
+                                <p className="text-[#64748b] dark:text-[#5C6370] text-[10px] uppercase tracking-widest font-semibold">
+                                  You
+                                </p>
+                              </div>
+                              <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md border border-black/10 dark:border-white/10 rounded-2xl rounded-tr-sm px-5 py-3 text-sm text-[#0f172a] dark:text-gray-200 shadow-lg max-w-[85%]">
+                                {message.content}
+                              </div>
+                            </motion.div>
+                          )}
+
+                          {/* AI MESSAGE */}
+                          {message.role === "assistant" && (
+                            <motion.div
+                              initial={{ opacity: 0, y: 15, scale: 0.98 }}
+                              animate={{ opacity: 1, y: 0, scale: 1 }}
+                              transition={{
+                                type: "spring",
+                                stiffness: 400,
+                                damping: 25,
+                              }}
+                              className="mb-6 flex flex-col items-start"
+                            >
+                              <div className="flex items-center gap-2 mb-2">
+                                <div className="w-5 h-5 rounded bg-[#fdf6e3] dark:bg-[#10141F] border border-black/20 dark:border-white/20 flex items-center justify-center">
+                                  <Code2 size={12} className="text-[#2DD4BF]" />
+                                </div>
+                                <p className="text-[#2DD4BF] text-[10px] uppercase tracking-widest font-semibold">
+                                  Codezy AI
+                                </p>
+                              </div>
+                              <div className="text-sm text-[#0f172a] dark:text-gray-300 leading-relaxed bg-[#f8fafc] dark:bg-[#0B0E14] border border-black/5 dark:border-white/5 rounded-2xl rounded-tl-sm px-5 py-4 w-full shadow-md">
+                                <ReactMarkdown
+                                  remarkPlugins={[remarkGfm]}
+                                  components={markdownComponents}
+                                >
+                                  {message.content}
+                                </ReactMarkdown>
+                              </div>
+                            </motion.div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* ================= CURRENT AI RESPONSE ================= */}
+
+                  {loading && !airesp ? (
+                    <div className="flex items-center gap-2 text-[#64748b] dark:text-[#5C6370] mt-6">
+                      <span className="animate-pulse">Thinking...</span>
+
+                      <span className="animate-pulse">●</span>
+
+                      <span
+                        className="animate-pulse"
+                        style={{
+                          animationDelay: "150ms",
+                        }}
+                      >
+                        ●
+                      </span>
+
+                      <span
+                        className="animate-pulse"
+                        style={{
+                          animationDelay: "300ms",
+                        }}
+                      >
+                        ●
+                      </span>
+                    </div>
+                  ) : airesp ? (
+                    <div className="mt-6 flex flex-col items-start relative">
+                      {/* Glow effect while generating */}
+                      {loading && (
+                        <div className="absolute top-10 left-10 w-48 h-48 bg-[#2DD4BF] opacity-[0.03] blur-[80px] rounded-full pointer-events-none" />
+                      )}
+
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="w-5 h-5 rounded bg-[#2DD4BF]/20 border border-[#2DD4BF]/40 flex items-center justify-center shadow-[0_0_10px_rgba(45,212,191,0.2)]">
+                          <Code2 size={12} className="text-[#2DD4BF]" />
+                        </div>
+                        <p className="text-[#2DD4BF] text-[10px] uppercase tracking-widest font-semibold">
+                          Codezy AI
+                        </p>
+                      </div>
+
+                      <div className="text-sm text-[#0f172a] dark:text-gray-300 leading-relaxed bg-[#f8fafc] dark:bg-[#0B0E14] border border-[#2DD4BF]/10 rounded-2xl rounded-tl-sm px-5 py-4 w-full shadow-md transition-all duration-300">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          components={markdownComponents}
+                        >
+                          {airesp}
+                        </ReactMarkdown>
+
+                        {/* Streaming Cursor */}
+                        {loading && (
+                          <span className="inline-block ml-1 w-2 h-4 bg-[#2DD4BF] animate-pulse rounded-sm align-middle shadow-[0_0_8px_#2DD4BF]"></span>
+                        )}
+                      </div>
+
+                      {/* Sources */}
+
+                      {!loading && airesources?.length > 0 && (
+                        <div className="mt-6 pt-4 border-t border-black/10 dark:border-white/10">
+                          <p className="text-[#8B93A7] text-xs tracking-widest uppercase mb-3">
+                            Sources
+                          </p>
+
+                          <div className="flex flex-wrap gap-2">
+                            {airesources.map((source, index) => (
+                              <span
+                                key={index}
+                                className="px-3 py-1.5 rounded-md bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs text-gray-600 dark:text-gray-400"
+                              >
+                                {source}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : aiHistory.length === 0 ? (
+                    /* ================= EMPTY STATE ================= */
+
+                    <div className="flex flex-col items-center justify-center py-16">
+                      <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 flex items-center justify-center mb-4">
+                        <Code2
+                          size={20}
+                          className="text-[#64748b] dark:text-[#5C6370]"
+                        />
+                      </div>
+
+                      <p className="text-[#64748b] dark:text-[#5C6370] text-sm">
+                        Ask a question to begin.
+                      </p>
+                    </div>
+                  ) : null}
                 </div>
-              </motion.div>
-            )}
-
-            {/* AI MESSAGE */}
-            {message.role === "assistant" && (
-              <motion.div
-                initial={{ opacity: 0, y: 15, scale: 0.98 }} 
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                className="mb-6 flex flex-col items-start"
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-5 h-5 rounded bg-[#fdf6e3] dark:bg-[#10141F] border border-black/20 dark:border-white/20 flex items-center justify-center">
-                    <Code2 size={12} className="text-[#2DD4BF]" />
-                  </div>
-                  <p className="text-[#2DD4BF] text-[10px] uppercase tracking-widest font-semibold">Codezy AI</p>
-                </div>
-                <div className="text-sm text-[#0f172a] dark:text-gray-300 leading-relaxed bg-[#f8fafc] dark:bg-[#0B0E14] border border-black/5 dark:border-white/5 rounded-2xl rounded-tl-sm px-5 py-4 w-full shadow-md">
-                  <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    components={markdownComponents}
-                  >
-                    {message.content}
-                  </ReactMarkdown>
-                </div>
-              </motion.div>
-            )}
-
-          </div>
-
-        ))}
-
-      </div>
-
-    )}
-
-    {/* ================= CURRENT AI RESPONSE ================= */}
-
-    {loading && !airesp ? (
-
-      <div className="flex items-center gap-2 text-[#64748b] dark:text-[#5C6370] mt-6">
-
-        <span className="animate-pulse">
-          Thinking...
-        </span>
-
-        <span className="animate-pulse">
-          ●
-        </span>
-
-        <span
-          className="animate-pulse"
-          style={{
-            animationDelay: "150ms",
-          }}
-        >
-          ●
-        </span>
-
-        <span
-          className="animate-pulse"
-          style={{
-            animationDelay: "300ms",
-          }}
-        >
-          ●
-        </span>
-
-      </div>
-
-    ) : airesp ? (
-
-      <div className="mt-6 flex flex-col items-start relative">
-        {/* Glow effect while generating */}
-        {loading && <div className="absolute top-10 left-10 w-48 h-48 bg-[#2DD4BF] opacity-[0.03] blur-[80px] rounded-full pointer-events-none" />}
-        
-        <div className="flex items-center gap-2 mb-3">
-          <div className="w-5 h-5 rounded bg-[#2DD4BF]/20 border border-[#2DD4BF]/40 flex items-center justify-center shadow-[0_0_10px_rgba(45,212,191,0.2)]">
-            <Code2 size={12} className="text-[#2DD4BF]" />
-          </div>
-          <p className="text-[#2DD4BF] text-[10px] uppercase tracking-widest font-semibold">
-            Codezy AI
-          </p>
-        </div>
-
-        <div className="text-sm text-[#0f172a] dark:text-gray-300 leading-relaxed bg-[#f8fafc] dark:bg-[#0B0E14] border border-[#2DD4BF]/10 rounded-2xl rounded-tl-sm px-5 py-4 w-full shadow-md transition-all duration-300">
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            components={markdownComponents}
-          >
-            {airesp}
-          </ReactMarkdown>
-          
-          {/* Streaming Cursor */}
-          {loading && (
-            <span className="inline-block ml-1 w-2 h-4 bg-[#2DD4BF] animate-pulse rounded-sm align-middle shadow-[0_0_8px_#2DD4BF]"></span>
-          )}
-        </div>
-
-        {/* Sources */}
-
-        {!loading && airesources?.length > 0 && (
-
-          <div className="mt-6 pt-4 border-t border-black/10 dark:border-white/10">
-
-            <p className="text-[#8B93A7] text-xs tracking-widest uppercase mb-3">
-              Sources
-            </p>
-
-            <div className="flex flex-wrap gap-2">
-
-              {airesources.map((source, index) => (
-
-                <span
-                  key={index}
-                  className="px-3 py-1.5 rounded-md bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs text-gray-600 dark:text-gray-400"
-                >
-                  {source}
-                </span>
-
-              ))}
-
-            </div>
-
-          </div>
-
-        )}
-
-      </div>
-
-    ) : aiHistory.length === 0 ? (
-
-      /* ================= EMPTY STATE ================= */
-
-      <div className="flex flex-col items-center justify-center py-16">
-
-        <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 flex items-center justify-center mb-4">
-
-          <Code2
-            size={20}
-            className="text-[#64748b] dark:text-[#5C6370]"
-          />
-
-        </div>
-
-        <p className="text-[#64748b] dark:text-[#5C6370] text-sm">
-          Ask a question to begin.
-        </p>
-
-      </div>
-
-    ) : null}
-
-  </div>
-
-</div>
-
-
+              </div>
             </div>
           </div>
         </div>

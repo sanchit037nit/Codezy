@@ -28,7 +28,6 @@ export const Loginpage = () => {
 
   return (
     <div className="relative flex justify-center items-center min-h-screen w-screen bg-[#f8fafc] dark:bg-[#0B0E14] text-[#0f172a] dark:text-[#E6E8EB] overflow-hidden font-mono">
-
       {/* subtle grid texture, consistent with landing page */}
       <div
         className="absolute inset-0 opacity-[0.04]"

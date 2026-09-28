@@ -8,7 +8,7 @@ export const moderatePost = async ({
   doubt,
   code,
   language,
-    platform,
+  platform,
   link,
 }) => {
   try {
@@ -75,7 +75,6 @@ ${link}
     });
 
     return JSON.parse(completion.choices[0].message.content);
-
   } catch (err) {
     console.error(err);
 

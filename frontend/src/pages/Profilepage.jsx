@@ -34,8 +34,10 @@ const ProfilePage = () => {
   // Profile info update
   const handleProfileUpdate = async () => {
     const updates = {};
-    if (name.trim() && name.trim() !== authUser?.name) updates.name = name.trim();
-    if (email.trim() && email.trim() !== authUser?.email) updates.email = email.trim();
+    if (name.trim() && name.trim() !== authUser?.name)
+      updates.name = name.trim();
+    if (email.trim() && email.trim() !== authUser?.email)
+      updates.email = email.trim();
 
     if (Object.keys(updates).length === 0) {
       alert("No profile changes provided.");
@@ -83,7 +85,6 @@ const ProfilePage = () => {
 
   return (
     <div className="relative min-h-screen pt-4 w-full bg-[#f8fafc] dark:bg-[#0B0E14] text-[#0f172a] dark:text-[#E6E8EB] font-mono overflow-hidden">
-
       {/* subtle grid texture, consistent with the rest of the app */}
       <div
         className="absolute inset-0 opacity-[0.04] pointer-events-none"
@@ -96,7 +97,6 @@ const ProfilePage = () => {
 
       <div className="relative z-10 max-w-2xl mx-auto px-4 py-6">
         <div className="bg-[#fdf6e3] dark:bg-[#10141F] border border-black/10 dark:border-white/10 rounded-lg shadow-2xl overflow-hidden">
-
           {/* tab bar */}
           <div className="flex items-center gap-2 px-4 py-3 bg-[#f8fafc] dark:bg-[#0B0E14] border-b border-black/5 dark:border-white/5">
             <span className="w-3 h-3 rounded-full bg-[#F5A623]/70" />
@@ -106,12 +106,14 @@ const ProfilePage = () => {
           </div>
 
           <div className="p-6 space-y-6">
-
             {/* Header */}
             <div className="text-center">
-              <h1 className="text-2xl font-bold text-[#0f172a] dark:text-[#E6E8EB]">Profile</h1>
+              <h1 className="text-2xl font-bold text-[#0f172a] dark:text-[#E6E8EB]">
+                Profile
+              </h1>
               <p className="mt-1 text-sm text-[#8B8FA3]">
-                <span className="text-[#64748b] dark:text-[#5C6370]">// </span>your personal account details
+                <span className="text-[#64748b] dark:text-[#5C6370]">// </span>
+                your personal account details
               </p>
             </div>
 
@@ -125,7 +127,9 @@ const ProfilePage = () => {
                 />
                 <label
                   htmlFor="avatar-upload"
-                  className={`absolute bottom-0 right-0 bg-[#F5A623] hover:bg-[#ffb43d] p-2 rounded-full cursor-pointer shadow-lg transition-colors duration-200 ${isupdatingprofile ? "animate-pulse pointer-events-none" : ""}`}
+                  className={`absolute bottom-0 right-0 bg-[#F5A623] hover:bg-[#ffb43d] p-2 rounded-full cursor-pointer shadow-lg transition-colors duration-200 ${
+                    isupdatingprofile ? "animate-pulse pointer-events-none" : ""
+                  }`}
                 >
                   <Camera className="w-4 h-4 text-[#0B0E14]" />
                   <input
@@ -139,7 +143,9 @@ const ProfilePage = () => {
                 </label>
               </div>
               <p className="text-sm text-[#64748b] dark:text-[#5C6370]">
-                {isupdatingprofile ? "Uploading..." : "Click the camera to update your photo"}
+                {isupdatingprofile
+                  ? "Uploading..."
+                  : "Click the camera to update your photo"}
               </p>
             </div>
 
@@ -239,7 +245,6 @@ const ProfilePage = () => {
                 </div>
               )}
             </div>
-
           </div>
         </div>
       </div>

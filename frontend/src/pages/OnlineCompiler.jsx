@@ -4,13 +4,7 @@ import { axiosinstance } from "../lib/axios";
 import Editor from "@monaco-editor/react";
 import "../assets/Compiler.css";
 
-import {
-  FaPlay,
-  FaCopy,
-  FaDownload,
-  FaTrash,
-  FaUndo,
-} from "react-icons/fa";
+import { FaPlay, FaCopy, FaDownload, FaTrash, FaUndo } from "react-icons/fa";
 
 const defaultCode = {
   cpp: `#include <iostream>
@@ -98,71 +92,53 @@ export default function Compiler() {
     URL.revokeObjectURL(url);
   };
 
-
-  
-const runCode = async () => {
+  const runCode = async () => {
     try {
-        setLoading(true);
-        setOutput("");
-        setError("");
-        setStatus("Running...");
-        setExecutionTime("");
-        setMemory("");
+      setLoading(true);
+      setOutput("");
+      setError("");
+      setStatus("Running...");
+      setExecutionTime("");
+      setMemory("");
 
-        const { data } = await axiosinstance.post("/sol/run", {
-            language,
-            code,
-            input,
-        });
+      const { data } = await axiosinstance.post("/sol/run", {
+        language,
+        code,
+        input,
+      });
 
-        console.log("Backend response:", data);
+      console.log("Backend response:", data);
 
-        const result = data.result;
+      const result = data.result;
 
-        console.log("JDoodle result:", result);
+      console.log("JDoodle result:", result);
 
-        // Output
-        setOutput(result?.output || "");
+      // Output
+      setOutput(result?.output || "");
 
-        // Error
-        setError(
-            result?.error ||
-            result?.compilationStatus ||
-            ""
-        );
+      // Error
+      setError(result?.error || result?.compilationStatus || "");
 
-        // Status
-        setStatus(
-            result?.isExecutionSuccess
-                ? "Accepted"
-                : "Error"
-        );
+      // Status
+      setStatus(result?.isExecutionSuccess ? "Accepted" : "Error");
 
-        // CPU time
-        setExecutionTime(
-            result?.cpuTime || ""
-        );
+      // CPU time
+      setExecutionTime(result?.cpuTime || "");
 
-        // Memory
-        setMemory(
-            result?.memory || ""
-        );
-
+      // Memory
+      setMemory(result?.memory || "");
     } catch (err) {
-        console.log("Execution error:", err);
+      console.log("Execution error:", err);
 
-        setStatus("Error");
+      setStatus("Error");
 
-        setError(
-            err.response?.data?.error ||
-            err.message ||
-            "Something went wrong."
-        );
-
+      setError(
+        err.response?.data?.error || err.message || "Something went wrong.",
+      );
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
+  };
 
   // const pollResult = (token) => {
   //   let attempts = 0;
@@ -197,182 +173,129 @@ const runCode = async () => {
   //   }, 1000);
   // };
 
-return (
-  <div className="compiler-page">
+  return (
+    <div className="compiler-page">
+      {/* TOP BAR */}
+      <div className="compiler-topbar">
+        <h2 className="compiler-title">
+          <span className="compiler-title-prompt">&gt;</span> codezy_compiler
+        </h2>
 
-    {/* TOP BAR */}
-    <div className="compiler-topbar">
-
-      <h2 className="compiler-title">
-        <span className="compiler-title-prompt">&gt;</span>{" "}
-        codezy_compiler
-      </h2>
-
-      <select
-        className="compiler-lang-select"
-        value={language}
-        onChange={(e) => handleLanguage(e.target.value)}
-      >
-        <option value="cpp">C++</option>
-        <option value="c">C</option>
-        <option value="java">Java</option>
-        <option value="python">Python</option>
-        <option value="javascript">JavaScript</option>
-      </select>
-
-    </div>
-
-
-    {/* TOOLBAR */}
-    <div className="compiler-toolbar">
-
-      <button
-        className="btn btn-primary"
-        onClick={runCode}
-        disabled={loading}
-      >
-        <FaPlay />
-        {loading ? "Running..." : "Run"}
-      </button>
-
-      <button
-        className="btn"
-        onClick={copyCode}
-      >
-        <FaCopy />
-        Copy
-      </button>
-
-      <button
-        className="btn"
-        onClick={downloadCode}
-      >
-        <FaDownload />
-        Download
-      </button>
-
-      <button
-        className="btn"
-        onClick={resetCode}
-      >
-        <FaUndo />
-        Reset
-      </button>
-
-      <button
-        className="btn"
-        onClick={clearOutput}
-      >
-        <FaTrash />
-        Clear
-      </button>
-
-    </div>
-
-
-    {/* IDE */}
-    <div className="compiler-main">
-
-      {/* CODE EDITOR */}
-      <div className="editor-section">
-
-        <Editor
-          height="100%"
-          language={language}
-          value={code}
-          theme={theme === "dark" ? "vs-dark" : "vs-light"}
-          onChange={(value) => setCode(value || "")}
-          options={{
-            fontSize: 16,
-            minimap: {
-              enabled: false
-            },
-            automaticLayout: true,
-            scrollBeyondLastLine: false,
-            wordWrap: "on",
-            tabSize: 4,
-            roundedSelection: true,
-          }}
-        />
-
+        <select
+          className="compiler-lang-select"
+          value={language}
+          onChange={(e) => handleLanguage(e.target.value)}
+        >
+          <option value="cpp">C++</option>
+          <option value="c">C</option>
+          <option value="java">Java</option>
+          <option value="python">Python</option>
+          <option value="javascript">JavaScript</option>
+        </select>
       </div>
 
+      {/* TOOLBAR */}
+      <div className="compiler-toolbar">
+        <button
+          className="btn btn-primary"
+          onClick={runCode}
+          disabled={loading}
+        >
+          <FaPlay />
+          {loading ? "Running..." : "Run"}
+        </button>
 
-      {/* RIGHT PANEL */}
-      <div className="right-panel">
+        <button className="btn" onClick={copyCode}>
+          <FaCopy />
+          Copy
+        </button>
 
-        {/* INPUT */}
-        <div className="panel-card">
+        <button className="btn" onClick={downloadCode}>
+          <FaDownload />
+          Download
+        </button>
 
-          <h3>Input</h3>
+        <button className="btn" onClick={resetCode}>
+          <FaUndo />
+          Reset
+        </button>
 
-          <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Enter custom input..."
+        <button className="btn" onClick={clearOutput}>
+          <FaTrash />
+          Clear
+        </button>
+      </div>
+
+      {/* IDE */}
+      <div className="compiler-main">
+        {/* CODE EDITOR */}
+        <div className="editor-section">
+          <Editor
+            height="100%"
+            language={language}
+            value={code}
+            theme={theme === "dark" ? "vs-dark" : "vs-light"}
+            onChange={(value) => setCode(value || "")}
+            options={{
+              fontSize: 16,
+              minimap: {
+                enabled: false,
+              },
+              automaticLayout: true,
+              scrollBeyondLastLine: false,
+              wordWrap: "on",
+              tabSize: 4,
+              roundedSelection: true,
+            }}
           />
-
         </div>
 
+        {/* RIGHT PANEL */}
+        <div className="right-panel">
+          {/* INPUT */}
+          <div className="panel-card">
+            <h3>Input</h3>
 
-        {/* STATS */}
-        <div className="panel-card stats-card">
-
-          <div>
-            <span>Status</span>
-            <h4>
-              {status || "--"}
-            </h4>
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Enter custom input..."
+            />
           </div>
 
-          <div>
-            <span>Time</span>
-            <h4>
-              {executionTime
-                ? `${executionTime}s`
-                : "--"}
-            </h4>
+          {/* STATS */}
+          <div className="panel-card stats-card">
+            <div>
+              <span>Status</span>
+              <h4>{status || "--"}</h4>
+            </div>
+
+            <div>
+              <span>Time</span>
+              <h4>{executionTime ? `${executionTime}s` : "--"}</h4>
+            </div>
+
+            <div>
+              <span>Memory</span>
+              <h4>{memory ? `${memory} KB` : "--"}</h4>
+            </div>
           </div>
 
-          <div>
-            <span>Memory</span>
-            <h4>
-              {memory
-                ? `${memory} KB`
-                : "--"}
-            </h4>
+          {/* OUTPUT */}
+          <div className="panel-card output-card">
+            <h3>Output</h3>
+
+            <pre>{output || "Run your program to see output..."}</pre>
           </div>
 
+          {/* ERROR */}
+          <div className="panel-card error-card">
+            <h3>Error</h3>
+
+            <pre>{error || "No errors"}</pre>
+          </div>
         </div>
-
-
-        {/* OUTPUT */}
-        <div className="panel-card output-card">
-
-          <h3>Output</h3>
-
-          <pre>
-            {output || "Run your program to see output..."}
-          </pre>
-
-        </div>
-
-
-        {/* ERROR */}
-        <div className="panel-card error-card">
-
-          <h3>Error</h3>
-
-          <pre>
-            {error || "No errors"}
-          </pre>
-
-        </div>
-
       </div>
-
     </div>
-
-  </div>
-);
+  );
 }

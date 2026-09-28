@@ -26,7 +26,9 @@ export const useContestStore = create((set, get) => ({
 
     // Listen for background worker scraping a new contest
     socket.on("new_contest_group", (contest) => {
-      toast.success(`New Contest Found: ${contest.contestName}! Groups created.`);
+      toast.success(
+        `New Contest Found: ${contest.contestName}! Groups created.`,
+      );
       set((state) => ({ contests: [...state.contests, contest] }));
     });
 
@@ -35,7 +37,7 @@ export const useContestStore = create((set, get) => ({
       toast.success(`Contest is now LIVE: ${data.name}!`);
       set((state) => ({
         contests: state.contests.map((c) =>
-          c._id === data.contestId ? { ...c, status: "ACTIVE" } : c
+          c._id === data.contestId ? { ...c, status: "ACTIVE" } : c,
         ),
       }));
     });
@@ -102,10 +104,10 @@ export const useContestStore = create((set, get) => ({
   // 4. Send a message to the group
   sendMessage: async (contestId, content, solutionId = null) => {
     try {
-      await axiosinstance.post(
-        `/contest/group/${contestId}/message`,
-        { content, solutionId }
-      );
+      await axiosinstance.post(`/contest/group/${contestId}/message`, {
+        content,
+        solutionId,
+      });
       // We don't update state here manually!
       // The backend will broadcast the "new_group_message" socket event,
       // which our listener above will catch and update the UI automatically.

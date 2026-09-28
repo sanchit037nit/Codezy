@@ -5,33 +5,58 @@ import StatCard from "../../../components/StatCard";
 import { useAuthstore } from "../../store/useAuthstore";
 import { useDashboardStore } from "../../store/useDashboardStore";
 import {
-  ResponsiveContainer, LineChart, BarChart, Bar, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, AreaChart,
-  Area, PieChart, Pie, Cell
+  ResponsiveContainer,
+  LineChart,
+  BarChart,
+  Bar,
+  Line,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  AreaChart,
+  Area,
+  PieChart,
+  Pie,
+  Cell,
 } from "recharts";
 
 const Dashboard = () => {
-
   const { dashboard, getDashboardStats, loading } = useDashboardStore();
   const { users, getusers } = useAuthstore();
   const months = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
 
-  const reportData = dashboard?.monthlyReports?.map(item => ({
-    month: months[item._id.month - 1],
-    Reports: item.count
-  })) || [];
+  const reportData =
+    dashboard?.monthlyReports?.map((item) => ({
+      month: months[item._id.month - 1],
+      Reports: item.count,
+    })) || [];
 
-  const monthlyPosts = dashboard?.monthlyPosts?.map(item => ({
-    month: months[item._id.month - 1],
-    Posts: item.count
-  })) || [];
+  const monthlyPosts =
+    dashboard?.monthlyPosts?.map((item) => ({
+      month: months[item._id.month - 1],
+      Posts: item.count,
+    })) || [];
 
-  const userGrowth = dashboard?.monthlyUsers?.map(item => ({
-    month: months[item._id.month - 1],
-    Users: item.count
-  })) || [];
+  const userGrowth =
+    dashboard?.monthlyUsers?.map((item) => ({
+      month: months[item._id.month - 1],
+      Users: item.count,
+    })) || [];
 
   const pieData = [
     { name: "Visible", value: dashboard?.totalPosts - dashboard?.hiddenPosts },
@@ -69,12 +94,10 @@ const Dashboard = () => {
     );
   }
 
-  const filteredUsers = users.filter((user) => user.role == 'user');
+  const filteredUsers = users.filter((user) => user.role == "user");
 
   return (
-
     <div className="relative min-h-screen w-full bg-[#f8fafc] dark:bg-[#0B0E14] text-[#0f172a] dark:text-[#E6E8EB] px-8 py-8 font-mono overflow-hidden">
-
       {/* subtle grid texture, consistent with the rest of the app */}
       <div
         className="absolute inset-0 opacity-[0.04] pointer-events-none"
@@ -86,18 +109,17 @@ const Dashboard = () => {
       />
 
       <div className="relative z-10">
-
         <div className="mb-8">
           <h1 className="text-2xl font-bold flex items-center gap-2">
             <span className="text-[#8B7FD6]">&gt;</span> dashboard
           </h1>
           <p className="text-[#8B8FA3] text-sm mt-1">
-            <span className="text-[#64748b] dark:text-[#5C6370]">// </span>monitor users, reports and platform activity
+            <span className="text-[#64748b] dark:text-[#5C6370]">// </span>
+            monitor users, reports and platform activity
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-10">
-
           <StatCard
             title="Total Reports"
             value={dashboard?.totalReports || 0}
@@ -134,31 +156,51 @@ const Dashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-
           <div className="bg-[#fdf6e3] dark:bg-[#10141F] border border-black/10 dark:border-white/10 rounded-lg p-6 h-[400px]">
-            <h2 className="text-sm text-[#8B8FA3] tracking-wide mb-5">monthly posts</h2>
+            <h2 className="text-sm text-[#8B8FA3] tracking-wide mb-5">
+              monthly posts
+            </h2>
 
             <ResponsiveContainer width="100%" height="90%">
               <LineChart data={monthlyPosts}>
                 <CartesianGrid strokeDasharray="3 3" stroke={GRID} />
-                <XAxis dataKey="month" stroke={AXIS} tick={{ fontSize: 12, fill: AXIS }} />
+                <XAxis
+                  dataKey="month"
+                  stroke={AXIS}
+                  tick={{ fontSize: 12, fill: AXIS }}
+                />
                 <YAxis stroke={AXIS} tick={{ fontSize: 12, fill: AXIS }} />
                 <Tooltip contentStyle={tooltipStyle} />
                 <Legend wrapperStyle={{ fontSize: 12, color: "#8B8FA3" }} />
-                <Line type="monotone" dataKey="Posts" stroke={TEAL} strokeWidth={2.5} dot={{ fill: TEAL, r: 3 }} />
+                <Line
+                  type="monotone"
+                  dataKey="Posts"
+                  stroke={TEAL}
+                  strokeWidth={2.5}
+                  dot={{ fill: TEAL, r: 3 }}
+                />
               </LineChart>
             </ResponsiveContainer>
           </div>
 
           <div className="bg-[#fdf6e3] dark:bg-[#10141F] border border-black/10 dark:border-white/10 rounded-lg p-6 h-[400px]">
-            <h2 className="text-sm text-[#8B8FA3] tracking-wide mb-5">monthly reports</h2>
+            <h2 className="text-sm text-[#8B8FA3] tracking-wide mb-5">
+              monthly reports
+            </h2>
 
             <ResponsiveContainer width="100%" height="90%">
               <BarChart data={reportData}>
                 <CartesianGrid strokeDasharray="3 3" stroke={GRID} />
-                <XAxis dataKey="month" stroke={AXIS} tick={{ fontSize: 12, fill: AXIS }} />
+                <XAxis
+                  dataKey="month"
+                  stroke={AXIS}
+                  tick={{ fontSize: 12, fill: AXIS }}
+                />
                 <YAxis stroke={AXIS} tick={{ fontSize: 12, fill: AXIS }} />
-                <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
+                <Tooltip
+                  contentStyle={tooltipStyle}
+                  cursor={{ fill: "rgba(255,255,255,0.03)" }}
+                />
                 <Legend wrapperStyle={{ fontSize: 12, color: "#8B8FA3" }} />
                 <Bar dataKey="Reports" radius={[6, 6, 0, 0]} fill={RED} />
               </BarChart>
@@ -166,27 +208,47 @@ const Dashboard = () => {
           </div>
 
           <div className="bg-[#fdf6e3] dark:bg-[#10141F] border border-black/10 dark:border-white/10 rounded-lg p-6 h-[400px]">
-            <h2 className="text-sm text-[#8B8FA3] tracking-wide mb-5">new users</h2>
+            <h2 className="text-sm text-[#8B8FA3] tracking-wide mb-5">
+              new users
+            </h2>
 
             <ResponsiveContainer width="100%" height="90%">
               <AreaChart data={userGrowth}>
                 <defs>
-                  <linearGradient id="userGrowthFill" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient
+                    id="userGrowthFill"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
                     <stop offset="5%" stopColor={AMBER} stopOpacity={0.35} />
                     <stop offset="95%" stopColor={AMBER} stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke={GRID} />
-                <XAxis dataKey="month" stroke={AXIS} tick={{ fontSize: 12, fill: AXIS }} />
+                <XAxis
+                  dataKey="month"
+                  stroke={AXIS}
+                  tick={{ fontSize: 12, fill: AXIS }}
+                />
                 <YAxis stroke={AXIS} tick={{ fontSize: 12, fill: AXIS }} />
                 <Tooltip contentStyle={tooltipStyle} />
-                <Area type="monotone" dataKey="Users" stroke={AMBER} strokeWidth={2} fill="url(#userGrowthFill)" />
+                <Area
+                  type="monotone"
+                  dataKey="Users"
+                  stroke={AMBER}
+                  strokeWidth={2}
+                  fill="url(#userGrowthFill)"
+                />
               </AreaChart>
             </ResponsiveContainer>
           </div>
 
           <div className="bg-[#fdf6e3] dark:bg-[#10141F] border border-black/10 dark:border-white/10 rounded-lg p-6 h-[400px]">
-            <h2 className="text-sm text-[#8B8FA3] tracking-wide mb-5">posts status</h2>
+            <h2 className="text-sm text-[#8B8FA3] tracking-wide mb-5">
+              posts status
+            </h2>
 
             <ResponsiveContainer width="100%" height="90%">
               <PieChart>
@@ -198,7 +260,12 @@ const Dashboard = () => {
                   label={{ fill: "#8B8FA3", fontSize: 12 }}
                 >
                   {pieData.map((entry, index) => (
-                    <Cell key={index} fill={PIE_COLORS[index]} stroke="#0B0E14" strokeWidth={2} />
+                    <Cell
+                      key={index}
+                      fill={PIE_COLORS[index]}
+                      stroke="#0B0E14"
+                      strokeWidth={2}
+                    />
                   ))}
                 </Pie>
                 <Tooltip contentStyle={tooltipStyle} />
@@ -207,8 +274,9 @@ const Dashboard = () => {
           </div>
 
           <div className="bg-[#fdf6e3] dark:bg-[#10141F] border border-black/10 dark:border-white/10 rounded-lg p-6 xl:col-span-2 mt-2">
-
-            <h2 className="text-sm text-[#8B8FA3] tracking-wide mb-5">recent reports</h2>
+            <h2 className="text-sm text-[#8B8FA3] tracking-wide mb-5">
+              recent reports
+            </h2>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
@@ -228,11 +296,16 @@ const Dashboard = () => {
                     >
                       <td className="py-3 flex items-center gap-3">
                         <img
-                          src={report.reporter.profilephoto || "/avatar-placeholder.png"}
+                          src={
+                            report.reporter.profilephoto ||
+                            "/avatar-placeholder.png"
+                          }
                           className="w-8 h-8 rounded-full object-cover border border-black/10 dark:border-white/10"
                           alt="avatar"
                         />
-                        <span className="text-[#0f172a] dark:text-[#E6E8EB]">{report.reporter.name}</span>
+                        <span className="text-[#0f172a] dark:text-[#E6E8EB]">
+                          {report.reporter.name}
+                        </span>
                       </td>
 
                       <td className="py-3 text-[#8B8FA3]">
@@ -254,13 +327,10 @@ const Dashboard = () => {
               </table>
             </div>
           </div>
-
         </div>
       </div>
     </div>
-
   );
-
 };
 
 export default Dashboard;

@@ -1,19 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { useSolution } from '../store/useSolutionstore'
+import React, { useEffect, useState } from "react";
+import { useSolution } from "../store/useSolutionstore";
 import { motion } from "framer-motion";
 import { FaRegHeart, FaTrash, FaRegComment } from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa6";
 import { useAuthstore } from "../store/useAuthstore.js";
 import { useParams } from "react-router-dom";
 
-
-
 const Viewpage = () => {
-  const { selpost, handlecomment } = useSolution()
+  const { selpost, handlecomment } = useSolution();
   const { authUser } = useAuthstore();
   const [comm, setComment] = useState("");
   const { id } = useParams();
-
 
   const isLiked = selpost?.likes?.includes(authUser?._id);
   const isbookmarked = selpost?.bookmarkedby?.includes(authUser?._id);
@@ -29,11 +26,8 @@ const Viewpage = () => {
     // wire up to your delete action, e.g. deletesol(postId)
   };
 
-
   return (
-
     <div className="flex flex-col items-center px-4 py-6 gap-4 relative min-h-screen bg-[#f8fafc] dark:bg-[#0B0E14] text-[#0f172a] dark:text-[#E6E8EB] overflow-hidden w-full font-mono">
-
       {/* subtle grid texture, consistent with the rest of the app */}
       <div
         className="absolute inset-0 opacity-[0.04] pointer-events-none"
@@ -67,7 +61,10 @@ const Viewpage = () => {
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full overflow-hidden border border-black/10 dark:border-white/10 shrink-0">
                 <img
-                  src={selpost?.createdby?.profilephoto || "/avatar-placeholder.png"}
+                  src={
+                    selpost?.createdby?.profilephoto ||
+                    "/avatar-placeholder.png"
+                  }
                   alt="avatar"
                   className="w-full h-full object-cover"
                 />
@@ -76,7 +73,9 @@ const Viewpage = () => {
                 <div className="font-semibold text-sm text-[#0f172a] dark:text-[#E6E8EB]">
                   {selpost?.createdby?.name}
                 </div>
-                <div className="text-xs text-[#64748b] dark:text-[#5C6370]">@{selpost?.platform}</div>
+                <div className="text-xs text-[#64748b] dark:text-[#5C6370]">
+                  @{selpost?.platform}
+                </div>
               </div>
             </div>
             <div className="flex gap-2">
@@ -93,12 +92,16 @@ const Viewpage = () => {
           <h2 className="text-sm font-semibold text-[#8B8FA3] tracking-wide mt-6 mb-1">
             // about contest
           </h2>
-          <p className="text-[#0f172a] dark:text-[#E6E8EB] text-sm leading-relaxed">{selpost?.doubt}</p>
+          <p className="text-[#0f172a] dark:text-[#E6E8EB] text-sm leading-relaxed">
+            {selpost?.doubt}
+          </p>
 
           <h2 className="text-sm font-semibold text-[#8B8FA3] tracking-wide mt-5 mb-1">
             // problem description
           </h2>
-          <p className="text-[#0f172a] dark:text-[#E6E8EB] text-sm leading-relaxed">{selpost?.description}</p>
+          <p className="text-[#0f172a] dark:text-[#E6E8EB] text-sm leading-relaxed">
+            {selpost?.description}
+          </p>
 
           <h2 className="text-sm font-semibold text-[#8B8FA3] tracking-wide mt-5 mb-2">
             // your code
@@ -153,13 +156,11 @@ const Viewpage = () => {
 
           {/* Comments */}
           <div className="w-full rounded-md bg-[#f8fafc] dark:bg-[#0B0E14] border border-black/10 dark:border-white/10 p-5 mt-6">
-
             <h3 className="font-semibold text-sm text-[#0f172a] dark:text-[#E6E8EB] border-b border-black/5 dark:border-white/5 pb-3 mb-4">
               Comments
             </h3>
 
             <div className="flex flex-col gap-3 max-h-64 overflow-y-auto pr-2">
-
               {selpost?.comments?.length === 0 && (
                 <p className="text-sm text-[#64748b] dark:text-[#5C6370] text-center py-4">
                   No comments yet — be the first one.
@@ -173,7 +174,10 @@ const Viewpage = () => {
                 >
                   <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 border border-black/10 dark:border-white/10">
                     <img
-                      src={selpost?.createdby?.profilephoto || "/avatar-placeholder.png"}
+                      src={
+                        selpost?.createdby?.profilephoto ||
+                        "/avatar-placeholder.png"
+                      }
                       alt="avatar"
                       className="w-full h-full object-cover"
                     />
@@ -189,13 +193,10 @@ const Viewpage = () => {
                       </span>
                     </div>
 
-                    <p className="text-sm text-[#8B8FA3]">
-                      {comment.text}
-                    </p>
+                    <p className="text-sm text-[#8B8FA3]">{comment.text}</p>
                   </div>
                 </div>
               ))}
-
             </div>
 
             {/* Comment Input */}
@@ -218,13 +219,11 @@ const Viewpage = () => {
                 Post
               </button>
             </form>
-
           </div>
         </div>
       </motion.div>
-
     </div>
-  )
-}
+  );
+};
 
-export default Viewpage
+export default Viewpage;

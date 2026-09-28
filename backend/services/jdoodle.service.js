@@ -3,82 +3,62 @@ import axios from "axios";
 const JDOODLE_URL = "https://api.jdoodle.com/v1/execute";
 
 const languageMap = {
-    cpp: {
-        language: "cpp",
-        versionIndex: "5",
-    },
-    c: {
-        language: "c",
-        versionIndex: "5",
-    },
-    java: {
-        language: "java",
-        versionIndex: "5",
-    },
-    python: {
-        language: "python3",
-        versionIndex: "4",
-    },
-    javascript: {
-        language: "nodejs",
-        versionIndex: "4",
-    },
+  cpp: {
+    language: "cpp",
+    versionIndex: "5",
+  },
+  c: {
+    language: "c",
+    versionIndex: "5",
+  },
+  java: {
+    language: "java",
+    versionIndex: "5",
+  },
+  python: {
+    language: "python3",
+    versionIndex: "4",
+  },
+  javascript: {
+    language: "nodejs",
+    versionIndex: "4",
+  },
 };
 
-export const executeCode = async (
-    language,
-    code,
-    input = ""
-) => {
+export const executeCode = async (language, code, input = "") => {
+  const languageInfo = languageMap[language];
 
-    const languageInfo = languageMap[language];
+  console.log(languageInfo);
 
-    console.log(languageInfo);
+  if (!languageInfo) {
+    throw new Error("Unsupported language");
+  }
 
-    if (!languageInfo) {
-        throw new Error("Unsupported language");
-    }
+  try {
+    const res = await axios.post(JDOODLE_URL, {
+      clientId: process.env.JDOODLE_CLIENT_ID,
+      clientSecret: process.env.JDOODLE_CLIENT_SECRET,
 
-    try {
+      script: code,
 
-        const res = await axios.post(
-            JDOODLE_URL,
-            {
-                clientId: process.env.JDOODLE_CLIENT_ID,
-                clientSecret: process.env.JDOODLE_CLIENT_SECRET,
+      language: languageInfo.language,
+      versionIndex: languageInfo.versionIndex,
 
-                script: code,
+      stdin: input,
+    });
 
-                language: languageInfo.language,
-                versionIndex: languageInfo.versionIndex,
+    console.log("JDoodle response received");
 
-                stdin: input,
-            }
-        );
+    return res.data;
+  } catch (error) {
+    console.log("JDoodle error:");
 
-        console.log("JDoodle response received");
+    console.log("Data:", error.response?.data);
 
-        return res.data;
+    console.log("Status:", error.response?.status);
 
-    } catch (error) {
+    console.log("Headers:", error.response?.headers);
 
-        console.log("JDoodle error:");
-
-        console.log(
-            "Data:",
-            error.response?.data
-        );
-
-        console.log(
-            "Status:",
-            error.response?.status
-        );
-
-        console.log(
-            "Headers:",
-            error.response?.headers
-        );
-
-        throw error;
-    }
+    throw error;
+  }
 };
