@@ -2024,39 +2024,20 @@ Add screenshots of the major application views.
 
 ### 🏠 Home / Dashboard
 
-```text
-Add screenshot here
-```
+![Codezy Home](./screenshots/home.png)
 
 ### 💻 Monaco Code Editor
 
-```text
-Add screenshot here
-```
+![Monaco Code Editor](./screenshots/monaco-editor.png)
 
 ### 🤖 AI Mentor
 
-```text
-Add screenshot here
-```
+![AI Mentor](./screenshots/aidoubtclearer.png)
 
 ### 🏆 Contest Dashboard
 
-```text
-Add screenshot here
-```
+![Contest Dashboard](./screenshots/contests.png)
 
-### 👥 Contest Discussion Group
-
-```text
-Add screenshot here
-```
-
-### 👤 Developer Profile
-
-```text
-Add screenshot here
-```
 
 ---
 
